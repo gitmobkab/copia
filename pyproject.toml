@@ -1,0 +1,45 @@
+[project]
+name = "copia"
+dynamic = ["version"]
+description = "Interactive TUI database seeder"
+readme = "README.md"
+authors = [
+    { name = "gitmobkab", email = "richmondaurel77@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "faker>=40.8.0",
+    "lark>=1.3.1",
+    "pydantic>=2.12.5",
+    "questionary>=2.1.1",
+    "sqlalchemy>=2.0.48",
+    "textual>=8.1.1",
+    "tomlkit>=0.14.0",
+    "typer>=0.24.1",
+]
+
+[project.scripts]
+copia = "copia.cli.app:app"
+
+
+[tool.hatch.version]
+path = "src/copia/_version.py"
+template = """
+VERSION = "{version}"
+"""
+
+[tool.hatch.build.hook.version]
+path = "src/copia/_version.py"
+template = """
+VERSION = "{version}"
+"""
+
+
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
