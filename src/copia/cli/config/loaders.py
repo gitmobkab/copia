@@ -42,8 +42,7 @@ def load_config(scope: CONFIG_SCOPES) -> dict:
     except PermissionError:
         raise PermissionError(f"not enough permissions to read {scope} config file at '{path}'")
     except tomllib.TOMLDecodeError as TOMLErr:
-        raise tomllib.TOMLDecodeError(f"{scope} config file is not a valid TOML file:", 
-                                      TOMLErr)
+        raise InvalidConfigError(f"{scope} config file is not a valid TOML file: {TOMLErr}")
             
 
 def get_profile_from_config(profile_name: str, config: dict) -> Profile:
