@@ -4,10 +4,10 @@ from pydantic import ValidationError
 from .globals import COPIA_CONFIG_FILE_DOC_LINK
 
 class InvalidConfigError(Exception):
-    """Exception raised when the config file is a valid TOML but in a way that breaks automatic management"""
+    """Exception raised when the config file is invalid in a way that breaks management"""
     
     def __str__(self) -> str:
-        return super().__str__() + f"See {COPIA_CONFIG_FILE_DOC_LINK} to fix it manually."
+        return super().__str__() + f"\nSee {COPIA_CONFIG_FILE_DOC_LINK} to fix it manually."
 
 class ProfileError(Exception):
     """base class for all profiles errors"""

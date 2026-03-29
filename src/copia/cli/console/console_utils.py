@@ -16,7 +16,7 @@ def print_error(error: Exception, ctx: Context | None = None, help_msg: None | s
     if help_msg is not None:
         stderr_console.print(f"[dim]{help_msg}")
     else:
-        stderr_console.print(f"[dim]Try [blue]'{APP_NAME} --help' for help.")
+        stderr_console.print(f"[dim]Try [blue]'{APP_NAME} --help'[/blue] for help.")
     
     error_panel = Panel(str(error), title="Error", border_style="red", title_align="left", highlight=True)
     stderr_console.print(error_panel)
