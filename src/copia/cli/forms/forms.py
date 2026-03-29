@@ -5,6 +5,7 @@ import questionary
 
 from ..config.globals import SUPPORTED_ADAPTERS, PORT_MIN_VAL, PORT_MAX_VAL
 from ..config.models import Profile, PROFILE_DEFAULTS
+from ..config.utils import is_valid_hostname, is_ascii_only
 
 SUPPORTED_ADAPTERS_LIST = list(get_args(SUPPORTED_ADAPTERS))
 
@@ -21,6 +22,23 @@ class NotEmptyStrValidator(questionary.Validator):
             raise questionary.ValidationError(
                 message="The string must have 3 or more characters",
                 cursor_position=len(document.text)
+            )
+
+class NotEmptyAndAsciiOnlyStrValidator(NotEmptyStrValidator):
+    def validate(self, document: Document) -> None:
+        super().validate(document)
+        if not is_ascii_only(document.text):
+            raise questionary.ValidationError(
+                message="The string must only contains ASCII characters",
+                cursor_position=len(document.text)
+            )
+
+class NotEmptyAndValidHostname(NotEmptyStrValidator):
+    def validate(self, document: Document) -> None:
+        super().validate(document)
+        if not is_valid_hostname(document.text):
+            raise questionary.ValidationError(
+                message="The string must be a valid hostname based on RFC 1123"
             )
             
 class PortValidator(questionary.Validator):
@@ -57,19 +75,20 @@ def profile_questionary(defaults: dict = {}) -> Profile:
                                  show_selected=True),
         
         host = questionary.text("type the host (localhost, 127.0.1.1, etc)",
-                            default=real_defaults["host"],
-                            validate=NotEmptyStrValidator),
-        
+                                default=real_defaults["host"],
+                                validate=NotEmptyAndValidHostname),
+                       
         port = questionary.text("type the port to use",
-                            default=real_defaults["port"],
-                            validate=PortValidator),
+                                default=real_defaults["port"],
+                                validate=PortValidator),
         
         database = questionary.text("type the name of the database used by the profile_data",
                                     default=real_defaults["database"],
-                                    validate=NotEmptyStrValidator),
+                                    validate=NotEmptyAndAsciiOnlyStrValidator),
     
         user = questionary.text("type the username to use for db connexion",
-                            default=real_defaults["user"]),
+                            default=real_defaults["user"],
+                            validate=NotEmptyStrValidator),
     
         password = questionary.password("the password to use to connect",
                                     default=real_defaults["password"])
@@ -77,7 +96,7 @@ def profile_questionary(defaults: dict = {}) -> Profile:
     
     form["port"] = int(form["port"])
     return Profile(**form)
-
+    
 def get_profile_defaults(profile_data: dict = {}) -> dict[str, str]:
     defaults: dict[str, str] = {}
     
