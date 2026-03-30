@@ -4,35 +4,61 @@
     
     see writers.py to modify or add a profile to the config file 
 """
-
+from typing import Any
 from pathlib import Path
 import tomllib
 
 
 from pydantic import ValidationError
 
-from .utils import resolve_config_path
-from .globals import  CONFIG_SCOPES
+from .globals import  CONFIG_SCOPES, LOCAL_COPIA_FILE, GLOBAL_COPIA_FILE
 from .models import Profile
 from .exceptions import (
-    NoProfilesFoundError,
-    ProfileNotATableError,
+    FoundProfileIsNotATableError,
+    ProfilesKeyIsNotATableError,
     ProfileNotFoundError,
     InvalidProfileError,
     InvalidConfigError
 )
 
-
-def parse_toml_file(path: Path) -> dict:
-    """
-    parse *path* as a toml file and return the configuration
+def parse_toml_file(path: Path) -> dict[str, Any]:
+    """parse path as a toml file and return the configuration
     unsafe function, exceptions must be handled by the caller
+
+    Args:
+        path (Path): the path of the file to parse.
+    
+    Raises:
+        FileNotFoundError: when the file couldn't be found.
+        PermissionError: when permission to read the file had been denied by the os.
+        TOMLDecodeError: when the content of the file can't be parsed to valid TOML.
+        
+    Returns:
+    **dict[str, Any]:** the content of the parsed toml file.
     """
     return tomllib.loads(path.read_text())
 
 
+def resolve_config_path(scope: CONFIG_SCOPES) -> Path:
+    if scope == "global":
+        return GLOBAL_COPIA_FILE
+    elif scope == "local":
+        return LOCAL_COPIA_FILE
 
-def load_config(scope: CONFIG_SCOPES) -> dict:
+def load_config(scope: CONFIG_SCOPES) -> dict[str, Any]:
+    """load the content of the config file linked to scope
+
+    Args:
+        scope (CONFIG_SCOPES): think of it as where to look the config file, either "local" or "global"
+
+    Raises:
+        FileNotFoundError: when the file couldn't be found.
+        PermissionError: when permission to read the file had been denied by the os.
+        InvalidConfigError: when the config can't be parsed into a valid TOML Document.
+
+    Returns:
+    **dict[str, Any]:** the parsed content of the config file.
+    """
 
     path = resolve_config_path(scope)
     try:
@@ -43,49 +69,64 @@ def load_config(scope: CONFIG_SCOPES) -> dict:
         raise PermissionError(f"not enough permissions to read {scope} config file at '{path}'")
     except tomllib.TOMLDecodeError as TOMLErr:
         raise InvalidConfigError(f"{scope} config file is not a valid TOML file: {TOMLErr}")
-            
+      
 
 def get_profile_from_config(profile_name: str, config: dict) -> Profile:
-    """try to fetch a valid profile from config
+    """try to get a valid profile from config
 
-        config must be a dict representation of the config file
+    config must be a dict representation of the config file
+
+    Args:
+        profile_name (str): the name by which the profile is identified
+        config (dict): the config supposed of holding the profile
+        
+    Raises:
+        FileNotFoundError: when the file couldn't be found.
+        PermissionError: when permission to read the file had been denied by the os.
+        InvalidConfigError: when the config isn't valid TOML or the value of the "profiles" key is not a dict/TOML Table
+        ProfileNotFoundError: when the "profiles.profile_name" key don't exist, this also includes missing "profiles" key
+        FoundProfileIsNotATableError: when the "profiles.profile_name" key exist but is not a dict
+        InvalidProfileError: when the profile isn't valid
+
+    Returns:
+        Profile: a valid Profile object
     """
     profiles = config.get("profiles")
-    if isinstance(profiles, list):
-        raise InvalidConfigError(
-            "The config file has  [ [ profiles ] ] instead of [ profiles.X ]. "
-            "This silently breaks all profile management. "
-        )
+    if profiles is None:
+        raise ProfileNotFoundError("no profiles found")
     if not isinstance(profiles, dict):
-        raise NoProfilesFoundError("no profiles found")
+        raise ProfilesKeyIsNotATableError("The config file 'profiles' key is not a TOML Table.")
     profile_data = profiles.get(profile_name)
     if profile_data is None:
         raise ProfileNotFoundError(f"{profile_name} not found")
     if not isinstance(profile_data, dict):
-        raise ProfileNotATableError(profile_name)
+        raise FoundProfileIsNotATableError(profile_name)
 
     try:
         return Profile(**profile_data)
     except ValidationError as Err:
         raise InvalidProfileError(Err)
-    
-def get_profile(profile_name: str, scope: CONFIG_SCOPES) -> Profile:
-    config = load_config(scope)
-    try:
-        return get_profile_from_config(profile_name, config)
-    except ProfileNotFoundError as err:
-        raise ProfileNotFoundError(f"{err} in the '{scope}' config file")
-    
 
-def get_any_profile(profile_name: str) -> Profile:
+
+def get_profile(profile_name: str, scope: CONFIG_SCOPES) -> Profile:
+    """try to get a valid profile from config based on scope
+
+    Args:
+        profile_name (str): the name by which the profile is identified
+        scope (CONFIG_SCOPES): think of it as where to look the config file, either "local" or "global"
+
+    Raises:
+        FileNotFoundError: when the file couldn't be found.
+        PermissionError: when permission to read the file had been denied by the os.
+        InvalidConfigError: when the config isn't valid TOML or the value of the "profiles" key is not a dict/TOML Table
+        ProfileNotFoundError: when the "profiles.profile_name" key don't exist, this also includes missing "profiles" key
+        FoundProfileIsNotATableError: when the "profiles.profile_name" key exist but is not a dict
+        InvalidProfileError: when the profile isn't valid
+        
+    Returns:
+        Profile: a valid Profile object
     """
-    Try to fetch *profile* from the local config file,
-    and fall back to global on any fail.
-    Any exception from local fetching get silently swallowed
-    
-    All the exceptions raised by this function are always in the global fetch state
-    """
-    try:
-        return get_profile(profile_name, "local")
-    except:
-        return get_profile(profile_name, "global")
+    config = load_config(scope)
+    return get_profile_from_config(profile_name, config)
+
+

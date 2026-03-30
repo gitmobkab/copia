@@ -11,15 +11,15 @@ class InvalidConfigError(Exception):
 
 class ProfileError(Exception):
     """base class for all profiles errors"""
-
-class NoProfilesFoundError(ProfileError):
-    """Exception raised when a loader didn't found a 'profiles' table in the TOML file"""
+    
+class ProfilesKeyIsNotATableError(ProfileError):
+    """Exception raised when the profiles key is found but not a TOML table"""
 
 class ProfileNotFoundError(ProfileError):
-    """Exception raised when the profile isn't defined in the confif file"""
+    """Exception raised when a profile couldn't be found in the config file"""
 
-class ProfileNotATableError(ProfileError):
-    """Exception raised when the profile is found, but isn't a TOML table"""
+class FoundProfileIsNotATableError(ProfileError):
+    """Exception raised when a profile is found, but isn't a TOML table"""
     
     def __init__(self, profile_name: str) -> None:
         self.profile_name = profile_name
@@ -32,8 +32,6 @@ class ProfileNotATableError(ProfileError):
 
 class ProfileAlreadyExists(ProfileError):
     """Exception raised when trying to add a profile that already exists"""
-
-
 
 
 class InvalidProfileError(ProfileError):
