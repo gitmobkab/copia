@@ -12,5 +12,8 @@ wheels/
 # Editor
 .vscode/
 
+# Coverage Tests
+.coverage
+
 # Version file
 _version.py
