@@ -2,7 +2,7 @@ from typing import Annotated, Union
 
 from ipaddress import IPv4Address, IPv6Address
 
-from pydantic import BaseModel, Field, StringConstraints, field_validator
+from pydantic import BaseModel, Field, StringConstraints, field_validator, ConfigDict
 from pydantic.networks import IPvAnyAddress
 
 from .globals import SUPPORTED_ADAPTERS, PORT_MIN_VAL, PORT_MAX_VAL
@@ -27,15 +27,14 @@ _ADAPTERS_SCHEMES: dict[SUPPORTED_ADAPTERS, str] = {
 }
 
 class Profile(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
     adapter: SUPPORTED_ADAPTERS
     host: Union[IPvAnyAddress, NotEmptyStr]
     port: Port
     database: NotEmptyStr
     user: NotEmptyStr
     password: str = ""
-    
-    class Config:
-        extra = "forbid"
     
     @property
     def adapter_scheme(self) -> str:
