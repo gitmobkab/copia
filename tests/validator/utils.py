@@ -1,7 +1,5 @@
 from typing import Literal
 
-import pytest
-
 from copia.validator.validator import SemanticValidator
 from copia.parser.models import GeneratorCall, Params, POSITIONALS, NAMED
 

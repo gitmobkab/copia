@@ -1,4 +1,4 @@
-from utils import make_call, VALIDATOR
+from tests.validator.utils import make_call, VALIDATOR
 
 import pytest
 
