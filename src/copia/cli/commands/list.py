@@ -1,8 +1,7 @@
 import typer
-from ..console import echo
+from copia.cli.console_utils import echo
 
 from ..config.loaders import load_config, get_profile_from_config
-from ..config.models import Profile
 from ..config.exceptions import InvalidProfileError
 
 list_profile_app = typer.Typer()
