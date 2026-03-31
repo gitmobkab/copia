@@ -1,12 +1,9 @@
 import typer
-from rich import print as pprint
 
 from copia._version import VERSION
-from .commands import list_app
+from .commands import list_app, init_command
 
-from .exit import exit_app
-
-from .console import print_error, echo
+from copia.cli.console_utils import print_error, echo
 from .config import (
     get_profile,
     LOCAL_COPIA_FILE,
@@ -16,6 +13,7 @@ from .config import (
 
 app = typer.Typer(invoke_without_command=True)
 
+app.add_typer(init_command)
 app.add_typer(list_app)
 
 @app.callback()
@@ -49,11 +47,11 @@ def main(
     
     if help_flag:
         echo(ctx.get_help())
-        exit_app()
-    
+        raise typer.Exit()
+        
     if version_flag:
         echo(f"[blue]copia {VERSION}")
-        exit_app()
+        raise typer.Exit()
     
     profile = None
     try:
@@ -67,7 +65,7 @@ def main(
         else:
             profile = get_any_profile(profile_name)
     except Exception as err:
-        print_error(err, ctx)
+        print_error(err)
         raise typer.Exit()
 
 
