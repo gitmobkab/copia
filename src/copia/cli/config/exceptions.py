@@ -1,13 +1,10 @@
 """All the exceptions used by the cli Layer of copia"""
 
 from pydantic import ValidationError
-from .globals import COPIA_CONFIG_FILE_DOC_LINK
+
 
 class InvalidConfigError(Exception):
     """Exception raised when the config file is invalid in a way that breaks management"""
-    
-    def __str__(self) -> str:
-        return super().__str__() + f"\nSee {COPIA_CONFIG_FILE_DOC_LINK} to fix it manually."
 
 class ProfileError(Exception):
     """base class for all profiles errors"""
