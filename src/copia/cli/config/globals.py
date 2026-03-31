@@ -1,4 +1,4 @@
-"""All the CONSTANTS shared by the copia cli"""
+"""All the CONSTANTS shared by the copia config module"""
 from typing import Literal
 from pathlib import Path
 
@@ -14,11 +14,3 @@ PORT_MAX_VAL = 65535
 SUPPORTED_ADAPTERS = Literal['mysql', "postgres"]
 CONFIG_SCOPES = Literal["local", "global"]
 
-UNEXPECTED_ERROR_HELP_MSG = """
-Copia encoutered an unexpected error
-Help us improving it by reporting it!
-"""
-
-# -- LINKS AND RESOURCES ---
-COPIA_CONFIG_FILE_DOC_LINK = "https://github.com/gitmobkab/copia/docs/config_file.md"
-COPIA_CONFIG_FILE_SCHEME = "https://github.com/gitmobkab/copia/configFileScheme.json"
