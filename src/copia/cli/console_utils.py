@@ -1,15 +1,20 @@
 from typing import Any
 
-from rich import print as rich_print
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from rich.console import Console
 from rich.panel import Panel
 from typer import Context
 
-from ..config.globals import APP_NAME
+from .config.globals import APP_NAME
 
 stderr_console = Console(stderr=True)
 stdout_console = Console()
 
+spinnerProgress = Progress(
+    SpinnerColumn(),
+    *Progress.get_default_columns(),
+    TimeElapsedColumn()
+)
 
 def print_error(error: Exception, ctx: Context | None = None, help_msg: None | str = None) -> None:
     if ctx is not None:
@@ -35,4 +40,3 @@ def echo(*objects: Any,
         console = stdout_console
     
     console.print(*objects, sep=sep, end=end)
-    
