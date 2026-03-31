@@ -1,0 +1,17 @@
+# if you're using an editor that supports taplo (https://taplo.tamasfe.dev/)
+# we advice you to reference copia config file scheme: https://github.com... for improved editing
+
+# This is an example of a copia config file
+# if you have no experience with copia, see https://github.com... 
+# you can also check the config file documentation at https://github.com...
+
+
+[profiles.default]
+adapter = "mysql"
+host = "localhost"
+port = 3306
+database = "mydb"
+user = "root"
+# password = "" 
+
+# the password key is optional and default to: ""

@@ -32,6 +32,9 @@ template = """
 VERSION = "{version}"
 """
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/copia"]
+include = ["src/copia/example.copia.toml"]
 
 [build-system]
 requires = ["hatchling", "uv-dynamic-versioning"]
