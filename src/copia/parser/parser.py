@@ -9,7 +9,7 @@ _parser = Lark(
     start="command"
 )
 
-def parse(command: str) -> list[Column]:
+def parse(command: str) -> set[Column]:
     """
     parse a string as a generation command and give a list of columns representing the command
     
