@@ -1,8 +1,12 @@
 from lark import Transformer
 from .models import *
-from .exceptions import DuplicateNamedParamException
+from .exceptions import DuplicateNamedParamException, DuplicateColumnNameError
 
 class CopiaTransformer(Transformer):
+    
+    def __init__(self, visit_tokens: bool = True) -> None:
+        super().__init__(visit_tokens)
+        self.defined_columns: set[str] = set()
             
     def IDENTIFIER(self, token) -> str:
         return str(token)
@@ -71,6 +75,11 @@ class CopiaTransformer(Transformer):
         
     def column(self, items) -> Column:
         if len(items) == 2:
+            column_name = items[0]
+            if column_name in self.defined_columns:
+                raise DuplicateColumnNameError(f"{column_name} is defined twice")
+            else:
+                self.defined_columns.add(column_name)
             return Column(
                 items[0],
                 items[1]
@@ -81,5 +90,5 @@ class CopiaTransformer(Transformer):
             items[0]
         )
     
-    def command(self, items) -> list[Column]:
-        return list(items)
+    def command(self, items) -> set[Column]:
+        return set(items)
