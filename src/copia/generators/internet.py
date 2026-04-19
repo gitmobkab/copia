@@ -1,6 +1,7 @@
 from typing import Literal
 
 from ._core import get_faker
+from .exceptions import GeneratorValueError
 
 
 def url() -> str:
@@ -13,7 +14,7 @@ def ipv4(
     
     SUPPORTED_ADDRESS_CLASSES = ["a", "b", "c"]
     if address_class not in SUPPORTED_ADDRESS_CLASSES:
-        raise ValueError(f"{address_class} is not a supported ipv4 address class")
+        raise GeneratorValueError(f"{address_class} is not a supported ipv4 address class")
     
     fake = get_faker()
     if private == True:

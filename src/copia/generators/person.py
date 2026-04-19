@@ -1,7 +1,7 @@
 from typing import Literal
 
 from ._core import get_faker
-
+from .exceptions import GeneratorValueError
 
 def name(gender: Literal["male","female", "nonbinary", "all"] = "all") -> str:
     first_name = firstname(gender)
@@ -20,7 +20,7 @@ def firstname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> 
         case "all":
             return fake.first_name()
         case _:
-            raise ValueError(f"{gender} is not an available gender")
+            raise GeneratorValueError(f"{gender} is not an available gender")
         
 
 def lastname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> str:
@@ -35,11 +35,7 @@ def lastname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> s
         case "all":
             return fake.last_name()
         case _:
-            raise ValueError(f"{gender} is not an available gender")
-        
-        
-def address() -> str:
-    return get_faker().address()
+            raise GeneratorValueError(f"{gender} is not an available gender")
 
 def phone() -> str:
     return get_faker().phone_number()
@@ -60,6 +56,6 @@ def password(length: int = 12,
              upper_case: bool = False,
              lower_case: bool = False) -> str:
     if length <= 0:
-        raise ValueError(f"length parameter must be greater than 0, got {length}")
+        raise GeneratorValueError(f"length parameter must be greater than 0, got {length}")
     fake = get_faker()
     return fake.password(length, special_chars, upper_case, lower_case)
