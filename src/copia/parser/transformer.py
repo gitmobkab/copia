@@ -90,5 +90,5 @@ class CopiaTransformer(Transformer):
             items[0]
         )
     
-    def command(self, items) -> set[Column]:
-        return set(items)
+    def command(self, items) -> list[Column]:
+        return list(items)
