@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 jobs:
   deploy:
@@ -13,12 +14,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
       - name: Set up Python
         run: uv python install 3.13
+
+      - name: Cache MkDocs social plugin
+        uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ github.ref }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
 
       - name: Install dependencies
         run: uv sync --all-groups
