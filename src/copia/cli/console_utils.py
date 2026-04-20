@@ -7,7 +7,7 @@ stderr_console = Console(stderr=True)
 stdout_console = Console()
 
 
-COPIA_DOC_LINK = "https://github.com"
+COPIA_DOC_LINK = "https://gitmobkab.github.io/copia/"
 SUBTITLE_HELP = f"[dim]See [blue]{COPIA_DOC_LINK}[/blue] for help."
 
 def print_error(error: Exception, help_msg: None | str = None) -> None:
