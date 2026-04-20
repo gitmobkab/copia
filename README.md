@@ -39,7 +39,7 @@ created_at: past_date()
 ## Installation
 
 ```bash
-pip install copia
+pip install copia-seed
 ```
 
 Requires Python 3.13+. MySQL and MariaDB are supported.
