@@ -1,8 +1,9 @@
 import inspect
 import importlib
 from pathlib import Path
-from collections.abc import Callable
+from typing import Callable
 from .exceptions import GeneratorValueError
+from ._documentation import generate_generators_markdown
 
 def _build_generators_registery() -> dict[str, Callable]:
     generators : dict[str, Callable] = {}
@@ -38,4 +39,4 @@ def _check_func_signature(func: Callable) -> None:
         raise ImportWarning(ERR_MSG)
 
 
-GENERATORS_REGISTERY = _build_generators_registery()
+GENERATORS_REGISTRY = _build_generators_registery()
