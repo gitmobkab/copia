@@ -1,4 +1,4 @@
-from textual.app import ComposeResult, App
+from textual.app import App
 from textual.widgets import TextArea
 from textual import events
 

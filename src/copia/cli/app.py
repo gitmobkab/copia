@@ -70,7 +70,7 @@ def main(
 
 
     echo(f"[dim]Found profile: {profile}")
-    echo(f"[dim]Connecting to db...")
+    echo("[dim]Connecting to db...")
     
     try:
         engine = create_profile_engine(profile)
@@ -116,6 +116,6 @@ def get_any_profile(profile_name: str):
         return get_profile(profile_name, "local")
     except Exception as err:
         echo(f"[dim red]Error: {err}")
-        echo(f"[dim]Falling back to global config...")
+        echo("[dim]Falling back to global config...")
         echo(f"[blue]Fetching profiles.\"{profile_name}\" from global config...")
         return get_profile(profile_name, "global")

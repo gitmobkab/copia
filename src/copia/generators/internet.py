@@ -27,7 +27,7 @@ def ipv4(
         raise GeneratorValueError(f"{address_class} is not a supported ipv4 address class")
     
     fake = get_faker()
-    if private == True:
+    if private:
         real_private = "private"
     else:
         real_private = "public"

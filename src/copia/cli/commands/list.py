@@ -70,7 +70,7 @@ def display_config_profiles(config: dict) -> None:
         except InvalidProfileError as invalid_profile_err:
             invalid_profiles += 1
             echo(f"\t[red]✗ profiles.{key}")
-            echo(f"\t\t[dim]Reason:")
+            echo("\t\t[dim]Reason:")
             for reason in invalid_profile_err:
                 echo(f"\t\t [dim]{reason}")
         except Exception as unexpected_err:

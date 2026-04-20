@@ -1,5 +1,5 @@
 from lark import Transformer
-from .models import *
+from .models import Params, GeneratorCall, Column
 from .exceptions import DuplicateNamedParamException, DuplicateColumnNameError
 
 class CopiaTransformer(Transformer):

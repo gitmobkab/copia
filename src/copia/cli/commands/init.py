@@ -46,9 +46,9 @@ def main(ctx: typer.Context,
         echo(f"Writing example file to '{config_path}'...")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(example)
-        echo(f"[green]Done.")
+        echo("[green]Done.")
     except (PermissionError) as err:
-        print_error(err, help_msg=f"you don't have enough 'permissions' to create the config file")
+        print_error(err, help_msg="you don't have enough 'permissions' to create the config file")
     except Exception as err:
         echo(f"Something went wrong while writing to '{config_path}'...")
         print_error(err)
