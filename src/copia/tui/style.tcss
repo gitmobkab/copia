@@ -1,0 +1,87 @@
+CopiaEditor{
+    height: 20%;
+}
+
+ActionBar{
+    height: 20%;
+}
+
+ResultsViewer {
+    border: round $border;
+    background: $background;
+    color: $foreground;
+}
+
+CopiaApp Screen {
+    background: $background;
+    color: $foreground;
+    layout: vertical;
+}
+
+HelpScreen {
+    layout: vertical;
+    width: 100%;
+    height: 100%;
+}
+
+#db-tree {
+    background: $background;
+    color: $foreground;
+    width: 30%;
+}
+
+TextArea {
+    background: $background;
+    color: $foreground;
+    border: tall $foreground;
+
+}
+
+TextArea:focus { 
+    border: tall $accent; 
+}
+
+TextArea > .text-area--cursor { 
+    background: $accent;
+    color: $background; 
+}
+
+Button:hover {
+    background: $panel;
+    color: $accent;
+    border: tall $secondary;
+}
+
+Button:focus { 
+    border: tall $accent; 
+}
+
+Button.-primary { 
+    background: $secondary;
+    color: $foreground;
+    border: tall $primary;
+}
+
+Button.-primary:hover {
+    background: $success;
+    color: $background;
+}
+
+Button.-success {
+    background: $panel;
+    color: $accent;
+    border: tall $secondary;
+}
+
+Button.-success:hover {
+    background: $secondary;
+    color: $foreground;
+}
+
+Label {
+    color: $foreground-muted;
+}
+
+RichLog{
+    background: $background;
+}
