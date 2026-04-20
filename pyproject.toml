@@ -20,9 +20,6 @@ dependencies = [
 [project.scripts]
 copia = "copia.cli.app:app"
 
-[tool.hatch.version]
-source = "vcs"
-raw-options = { local_scheme = "no-local-version" }
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/copia"]
@@ -31,8 +28,11 @@ include = [
     "src/copia/data/*"
 ]
 
+[tool.hatch.version]
+path = "src/copia/_version.py"
+
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]

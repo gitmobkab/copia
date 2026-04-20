@@ -1,6 +1,6 @@
 import typer
 
-from .version import __version__
+from copia._version import __version__
 from .commands import list_app, init_command
 from .exit_codes import ExitCodes
 from ..db import create_profile_engine, verify_engine_connection
