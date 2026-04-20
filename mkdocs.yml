@@ -6,11 +6,14 @@ repo_name: gitmobkab/copia
 
 theme:
   name: material
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
   palette:
     scheme: slate
     primary: custom
     accent: custom
   font:
+    text: IBM Plex Sans
     code: JetBrains Mono
   features:
     - navigation.instant
@@ -56,6 +59,10 @@ markdown_extensions:
 plugins:
   - search
   - meta
-  - social
+  - social:
+      cards_layout_options:
+        background_color: "#0f1210"
+        color: "#e2ece2"
+        font_family: JetBrains Mono
   - blog:
       blog_toc: true
