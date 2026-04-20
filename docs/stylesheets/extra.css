@@ -1,0 +1,153 @@
+:root {
+  /* Copia brand colors — single source of truth */
+  --copia-primary:     #4caf6e;
+  --copia-primary-dim: #3d7a50;
+  --copia-primary-light: #6fcf8e;
+
+  --copia-bg:          #0f1210;
+  --copia-surface:     #141918;
+  --copia-panel:       #1a1f1b;
+  --copia-elevated:    #1f2520;
+
+  --copia-fg:          #e2ece2;
+  --copia-fg-muted:    #b8ccb8;
+  --copia-fg-dim:      #7a977a;
+
+  /* Wire Copia vars into MkDocs Material vars */
+  --md-primary-fg-color:              var(--copia-primary);
+  --md-primary-fg-color--light:       var(--copia-primary-light);
+  --md-primary-fg-color--dark:        var(--copia-primary-dim);
+  --md-accent-fg-color:               var(--copia-primary);
+  --md-accent-fg-color--transparent:  #4caf6e1a;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:              var(--copia-bg);
+  --md-default-bg-color--light:       var(--copia-surface);
+  --md-default-bg-color--lighter:     var(--copia-panel);
+  --md-default-bg-color--lightest:    var(--copia-elevated);
+
+  --md-default-fg-color:              var(--copia-fg);
+  --md-default-fg-color--light:       var(--copia-fg-muted);
+  --md-default-fg-color--lighter:     var(--copia-fg-dim);
+  --md-default-fg-color--lightest:    #3d4e3d;
+
+  --md-code-bg-color:                 var(--copia-surface);
+  --md-code-fg-color:                 var(--copia-fg);
+
+  --md-typeset-a-color:               var(--copia-primary);
+
+  --md-admonition-bg-color:           var(--copia-panel);
+
+  --md-typeset-table-color:           var(--copia-panel);
+  --md-typeset-table-color--light:    var(--copia-surface);
+
+  scrollbar-color: var(--copia-primary-dim) var(--copia-bg);
+}
+
+/* Header / tabs */
+.md-header {
+  background-color: var(--copia-surface);
+  box-shadow: 0 1px 0 var(--copia-primary-dim);
+}
+
+.md-tabs {
+  background-color: var(--copia-surface);
+  border-bottom: 1px solid var(--copia-panel);
+}
+
+.md-tabs__link {
+  color: var(--copia-fg-muted);
+  opacity: 1;
+}
+
+.md-tabs__link--active,
+.md-tabs__link:hover {
+  color: var(--copia-primary) !important;
+}
+
+.md-tabs__indicator {
+  background-color: var(--copia-primary);
+}
+
+/* Sidebar */
+.md-nav {
+  background-color: var(--copia-bg);
+}
+
+.md-nav__link {
+  color: var(--copia-fg-muted);
+}
+
+.md-nav__link--active,
+.md-nav__link:hover {
+  color: var(--copia-primary) !important;
+}
+
+.md-nav__link--active {
+  border-left: 2px solid var(--copia-primary);
+  padding-left: 0.4rem;
+}
+
+/* Inline code */
+.md-typeset code {
+  background-color: var(--copia-panel);
+  color: var(--copia-primary);
+  border-radius: 3px;
+  padding: 0 4px;
+}
+
+/* Code blocks *//* 
+.md-typeset pre > code {
+  color: var(--copia-fg);
+  background-color: transparent;
+  padding: 0;
+}
+
+.md-typeset pre {
+  background-color: var(--copia-surface);
+  border: 1px solid var(--copia-elevated);
+  border-radius: 4px;
+}
+
+/* Blockquotes — signatures 
+.md-typeset blockquote {
+  border-left: 3px solid var(--copia-primary-dim);
+  background-color: var(--copia-surface);
+  padding: 0.5rem 1rem;
+  color: var(--copia-fg-muted);
+  font-style: normal;
+}
+ */
+/* Tables */
+.md-typeset table:not([class]) th {
+  background-color: var(--copia-panel);
+  color: var(--copia-primary);
+}
+
+.md-typeset table:not([class]) td {
+  color: var(--copia-fg);
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) td {
+  background-color: var(--copia-surface);
+}
+
+.md-typeset table:not([class]) tr:hover td {
+  background-color: var(--copia-elevated);
+}
+
+/* Search */
+.md-search__input {
+  background-color: var(--copia-panel);
+  color: var(--copia-fg);
+}
+
+/* Footer */
+.md-footer {
+  background-color: var(--copia-surface);
+}
+
+.md-footer-meta {
+  background-color: var(--copia-bg);
+}

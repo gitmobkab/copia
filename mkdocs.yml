@@ -1,0 +1,61 @@
+site_name: Copia
+site_description: Interactive TUI database seeder
+site_author: gitmobkab
+repo_url: https://github.com/gitmobkab/copia
+repo_name: gitmobkab/copia
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: custom
+    accent: custom
+  font:
+    code: JetBrains Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.indexes
+    - toc.integrate
+    - content.code.copy
+    - navigation.tabs
+
+hooks:
+  - hooks/dsl_hook.py
+  - hooks/generators_hook.py
+  - hooks/changelog_hook.py
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Installation: installation.md
+  - Quickstart: quickstart.md
+  - DSL Reference: dsl.md
+  - Configuration: configuration.md
+  - Generators: 
+    - generators/index.md
+  - Blog:
+    - blog/index.md
+  - Changelog: changelog.md
+    
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+
+plugins:
+  - search
+  - meta
+  - social
+  - blog:
+      blog_toc: true
