@@ -1,8 +1,12 @@
 import typer
 
+from sqlalchemy import inspect
+
 from copia._version import VERSION
 from .commands import list_app, init_command
-
+from .exit_codes import ExitCodes
+from ..db import create_profile_engine, verify_engine_connection
+from ..tui import CopiaApp
 from copia.cli.console_utils import print_error, echo
 from .config import (
     get_profile,
@@ -69,7 +73,24 @@ def main(
         raise typer.Exit()
 
 
-    print(profile) # connexion logic for later
+    echo(f"[dim]Found profile: {profile}")
+    echo(f"[dim]Connecting to db...")
+    
+    try:
+        engine = create_profile_engine(profile)
+        verify_engine_connection(engine)
+        echo("[green]Connection to db successfull")
+    except ModuleNotFoundError:
+        echo("[red]Error: Missing dependency for postgres, try pip install copia[postgres]")
+    except Exception as connection_err:
+        print_error(connection_err)
+        raise typer.Exit(ExitCodes.CONNEXION_TO_DB_FAILED)
+
+    try:
+        CopiaApp(engine).run()
+        echo("[bold green]Bye.")
+    except Exception as err:
+        print_error(err, "Something unexpected while running the tui...")
         
             
 def get_any_profile(profile_name: str):
