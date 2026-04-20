@@ -12,7 +12,6 @@ from .exceptions import (
     PositionalNamedCollisionException
 )
 
-# TODO: missing _check_positionals_named_collisions test to add 
 class SemanticValidator:
     def __init__(self, registry: dict[str, Callable]):
         self.registry = registry
