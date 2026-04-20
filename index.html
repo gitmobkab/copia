@@ -1795,36 +1795,57 @@
 <p><strong>Seed your database without the hassle.</strong></p>
 <p>Most frameworks either ship a seeder with questionable decisions, or don't ship one at all. Either way, populating a database with realistic data is tedious — and it shouldn't be.</p>
 <p>Copia is a TUI-based database seeder with its own declarative language. You describe what data you want, column by column. Copia generates it and inserts it — no boilerplate, no framework dependency.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>id:         uuid()
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>username:   username()
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>email:      email(safe=True)
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>password:   password(length=20)
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>role:       enum(&#39;admin&#39;, &#39;editor&#39;, &#39;viewer&#39;)
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>created_at: past_date()
-</code></pre></div>
-<p>That's it. That's a table seed.</p>
 <hr />
 <h2 id="why-copia">Why Copia</h2>
+<p>You have this table:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="n">id</span><span class="w">           </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">36</span><span class="p">)</span><span class="w">      </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="n">username</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w">   </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="n">email</span><span class="w">        </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w">  </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">UNIQUE</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="n">password</span><span class="w">     </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w">  </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="k">role</span><span class="w">         </span><span class="n">ENUM</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;editor&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;viewer&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">  </span><span class="n">created_at</span><span class="w">   </span><span class="nb">DATE</span><span class="w">          </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">);</span>
+</code></pre></div>
+<p>Without copia, seeding it looks like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="k">role</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="p">)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">VALUES</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="p">(</span><span class="s1">&#39;a1b2c3d4-...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;john_doe&#39;</span><span class="p">,</span><span class="w">    </span><span class="s1">&#39;john@example.com&#39;</span><span class="p">,</span><span class="w">  </span><span class="s1">&#39;$2b$12$...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">,</span><span class="w">  </span><span class="s1">&#39;2023-04-12&#39;</span><span class="p">),</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="p">(</span><span class="s1">&#39;e5f6g7h8-...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;jane_smith&#39;</span><span class="p">,</span><span class="w">  </span><span class="s1">&#39;jane@example.com&#39;</span><span class="p">,</span><span class="w">  </span><span class="s1">&#39;$2b$12$...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;editor&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2024-01-05&#39;</span><span class="p">),</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="p">(</span><span class="s1">&#39;i9j0k1l2-...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;bob_99&#39;</span><span class="p">,</span><span class="w">      </span><span class="s1">&#39;bob@example.com&#39;</span><span class="p">,</span><span class="w">   </span><span class="s1">&#39;$2b$12$...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;viewer&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2022-11-30&#39;</span><span class="p">),</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="p">(</span><span class="s1">&#39;m3n4o5p6-...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;alice_w&#39;</span><span class="p">,</span><span class="w">     </span><span class="s1">&#39;alice@example.com&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;$2b$12$...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;admin&#39;</span><span class="p">,</span><span class="w">  </span><span class="s1">&#39;2023-08-19&#39;</span><span class="p">),</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="p">(</span><span class="s1">&#39;q7r8s9t0-...&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;charlie_k&#39;</span><span class="p">,</span><span class="w">   </span><span class="s1">&#39;charlie@example.com&#39;</span><span class="p">,</span><span class="s1">&#39;$2b$12$...&#39;</span><span class="p">,</span><span class="s1">&#39;editor&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;2024-03-02&#39;</span><span class="p">);</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="c1">-- ... 55 more rows. good luck with that.</span>
+</code></pre></div>
+<p>With copia:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>id:          uuid()
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>username:    username()
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>email:       email(safe=True)
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>password:    password(length=16)
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>role:        enum(&#39;admin&#39;, &#39;editor&#39;, &#39;viewer&#39;)
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>created_at:  past_date()
+</code></pre></div>
+<p>Run it for as many rows as you need. Thanks to Faker every value is realistic, fetched from a rich dataset, and valid.</p>
 <ul>
 <li><strong>Framework-agnostic.</strong> Works on any relational database, any stack.</li>
 <li><strong>Simple language.</strong> If you know what a function call looks like, you know the Copia DSL.</li>
 <li><strong>Realistic data.</strong> Built on <a href="https://faker.readthedocs.io/">Faker</a> — names, emails, addresses, IPs, dates, and more out of the box.</li>
-<li><strong>Relational-aware.</strong> The <code>ref()</code> generator lets you sample from existing rows, so foreign keys just work.</li>
+<li><strong>Relational-aware.</strong> The <a href="generators/ref/"><code>ref()</code></a> generator lets you sample from existing rows, so foreign keys just work.</li>
 <li><strong>Interactive.</strong> A full TUI lets you write, preview, and insert without leaving your terminal.</li>
 </ul>
 <hr />
 <h2 id="quick-example">Quick example</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a># seed the users table
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>id:         uuid()
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>username:   username()
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>email:      email()
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>birthdate:  date_of_birth()
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a># seed the posts table — references existing users
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>id:      uuid()
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>user_id: ref(&#39;users.id&#39;)
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>body:    paragraph()
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>date:    past_date()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a># seed the users table
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>id:         uuid()
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>username:   username()
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>email:      email()
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>birthdate:  date_of_birth()
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a># seed the posts table — references existing users
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>id:      uuid()
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>user_id: ref(&#39;users.id&#39;)
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>body:    paragraph()
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>date:    past_date()
 </code></pre></div>
 <hr />
 <h2 id="get-started">Get started</h2>
