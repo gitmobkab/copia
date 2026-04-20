@@ -5,25 +5,25 @@ Copia requires **Python 3.13 or higher**.
 === "uv"
 
     ```bash
-    uv add copia
+    uv add copia-seed
     ```
 
     Or as a standalone tool:
 
     ```bash
-    uv tool install copia
+    uv tool install copia-seed
     ```
 
 === "pip"
 
     ```bash
-    pip install copia
+    pip install copia-seed
     ```
 
 === "pipx"
 
     ```bash
-    pipx install copia
+    pipx install copia-seed
     ```
 
 === "From source"
