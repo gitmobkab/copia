@@ -1,15 +1,15 @@
-from sqlalchemy import create_engine, URL, Connection
+from sqlalchemy import create_engine, URL, Engine, text
 
 from copia.cli.config import Profile
 
 
-def connect_to_db(profile: Profile) -> Connection:
-    """connect to a database using the given profile information
+def create_profile_engine(profile: Profile) -> Engine:
+    """create an engine using the given profile informations
     
-    multiple errors can be raised while attempting to connect,
+    Note: the returned engine does not guarantee a successful connection to the database,
     
-    the caller is expected to handle them
-
+    use verify_engine_connection to ensure that
+    
     Args:
         profile (Profile): the profile to use for the connection
 
@@ -26,5 +26,8 @@ def connect_to_db(profile: Profile) -> Connection:
         database=profile.database
     )
     
-    return create_engine(connection_url).connect()
+    return create_engine(connection_url)
 
+def verify_engine_connection(engine: Engine) -> None:
+    with engine.connect() as connection:
+        connection.execute(text("SELECT 1"))
