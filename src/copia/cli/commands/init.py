@@ -19,7 +19,7 @@ def main(ctx: typer.Context,
         is_global_config: bool = typer.Option(
     False, "-g", "--global", help="create the config file as a global config"
 )):
-    """generate a template config file for copia
+    """[blue]generate a template config file for copia[/]
     
     by default it create a local scoped config file
     """

@@ -7,12 +7,20 @@ from ..config.exceptions import InvalidProfileError
 list_profile_app = typer.Typer()
 
 @list_profile_app.command("list")
-def list_profiles():
-    """[blue]list all profiles[/] defined in both global and local config files"""
+def list_profiles(
+    ctx: typer.Context,
+    help_flag: bool = 
+                typer.Option(False, "-h", "--help", help="Display this message and exit")):
+    
+    """[blue]list all profiles defined in both global and local config files"""
     local_config = None
     global_config = None
     local_failure_reason = None
     global_failure_reason = None
+    
+    if help_flag:
+        echo(ctx.get_help())
+        return
     
     try:
         local_config = load_config("local")
