@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/gitmobkab/copia/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/gitmobkab/copia/ci.yml?branch=main&style=for-the-badge&label=CI" alt="CI"></a>
-  <a href="https://pypi.org/project/copia-seed/"><img src="https://img.shields.io/pypi/v/copia-seed?style=for-the-badge&color=4caf6e" alt="PyPI"></a>
+  <a href="https://pypi.org/project/copia-seed/"><img src="https://img.shields.io/pypi/v/copia-seed?style=for-the-badge&color=#4caf6e" alt="PyPI"></a>
   <a href="https://pypi.org/project/copia-seed/"><img src="https://img.shields.io/pypi/pyversions/copia-seed?style=for-the-badge" alt="Python"></a>
   <a href="LICENSE"><img src="https://img.shields.io/github/license/gitmobkab/copia?style=for-the-badge" alt="License"></a>
   <a href="https://gitmobkab.github.io/copia/"><img src="https://img.shields.io/badge/docs-material-4caf6e?style=for-the-badge" alt="Docs"></a>

@@ -315,7 +315,7 @@ wheels = [
 ]
 
 [[package]]
-name = "copia"
+name = "copia-seed"
 source = { editable = "." }
 dependencies = [
     { name = "faker" },
