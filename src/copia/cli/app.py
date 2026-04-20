@@ -1,8 +1,6 @@
 import typer
 
-from sqlalchemy import inspect
-
-from copia._version import VERSION
+from .version import __version__
 from .commands import list_app, init_command
 from .exit_codes import ExitCodes
 from ..db import create_profile_engine, verify_engine_connection
@@ -42,9 +40,7 @@ def main(
                                             help=f"Search only in [green]'{LOCAL_COPIA_FILE}'"),
          ):
     
-    """An Interactive TUI app for MySQL and Postegres Database seeding
-    
-    """
+    """An Interactive TUI app for MySQL Database seeding"""
     
     if ctx.invoked_subcommand is not None:
         return
@@ -54,7 +50,7 @@ def main(
         raise typer.Exit()
         
     if version_flag:
-        echo(f"[blue]copia {VERSION}")
+        echo(f"[blue]copia {__version__}")
         raise typer.Exit()
     
     profile = None
