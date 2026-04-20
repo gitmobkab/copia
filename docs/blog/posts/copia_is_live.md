@@ -29,4 +29,4 @@ PostgreSQL support is the obvious next step. Beyond that — more generators, be
 
 If you run into anything broken or missing, open an issue.
 
-### btw, Material for MkDocs is fantastic. Highly recommend if you're building docs with MkDocs.
+> btw, Material for MkDocs is fantastic. Highly recommend if you're building docs with MkDocs.

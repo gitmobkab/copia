@@ -97,11 +97,10 @@
   padding: 0 4px;
 }
 
-/* Code blocks *//* 
+/* Code blocks */ 
 .md-typeset pre > code {
   color: var(--copia-fg);
   background-color: transparent;
-  padding: 0;
 }
 
 .md-typeset pre {
@@ -110,7 +109,7 @@
   border-radius: 4px;
 }
 
-/* Blockquotes — signatures 
+/* Blockquotes — signatures */
 .md-typeset blockquote {
   border-left: 3px solid var(--copia-primary-dim);
   background-color: var(--copia-surface);
@@ -118,7 +117,7 @@
   color: var(--copia-fg-muted);
   font-style: normal;
 }
- */
+
 /* Tables */
 .md-typeset table:not([class]) th {
   background-color: var(--copia-panel);
