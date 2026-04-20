@@ -1,5 +1,5 @@
 [project]
-name = "copia"
+name = "copia-seed"
 dynamic = ["version"]
 description = "Interactive TUI database seeder"
 readme = "README.md"
