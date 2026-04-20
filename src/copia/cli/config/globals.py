@@ -11,6 +11,6 @@ LOCAL_COPIA_FILE = Path(".copia.toml")
 GLOBAL_COPIA_FILE = Path(APP_DIR) / "profiles.toml"
 PORT_MIN_VAL = 1
 PORT_MAX_VAL = 65535
-SUPPORTED_ADAPTERS = Literal['mysql', "postgres"]
+SUPPORTED_ADAPTERS = Literal['mysql']
 CONFIG_SCOPES = Literal["local", "global"]
 

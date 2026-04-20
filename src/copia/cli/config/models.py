@@ -23,7 +23,6 @@ Port = Annotated[int, Field(
 
 _ADAPTERS_SCHEMES: dict[SUPPORTED_ADAPTERS, str] = {
     "mysql": "mysql+pymysql",
-    "postgres": "postgresql+psycopg2",
 }
 
 class Profile(BaseModel):
