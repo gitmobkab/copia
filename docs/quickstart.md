@@ -93,5 +93,6 @@ Press `?` at any time to open the help screen — full DSL reference and all ava
 ## Next steps
 
 - [DSL Reference](dsl.md) — full language documentation
+- [CLI Reference](cli.md) — all available commands and options
 - [Generators](generators/index.md) — all available generators and their parameters
-- [Configuration](configuration.md) — profiles, adapters, and options
+- [Configuration](configuration/index.md) — profiles, adapters, and options
