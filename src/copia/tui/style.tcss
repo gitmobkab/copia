@@ -13,8 +13,6 @@ ResultsViewer {
 }
 
 CopiaApp Screen {
-    background: $background;
-    color: $foreground;
     layout: vertical;
 }
 
@@ -52,10 +50,6 @@ Button:hover {
     border: tall $secondary;
 }
 
-Button:focus { 
-    border: tall $accent; 
-}
-
 Button.-primary { 
     background: $secondary;
     color: $foreground;
@@ -76,6 +70,12 @@ Button.-success {
 Button.-success:hover {
     background: $secondary;
     color: $foreground;
+}
+
+GenerationSettingsScreen #close:hover {
+    background: $error;
+    color: $background;
+    border: none;
 }
 
 Label {
