@@ -12,25 +12,31 @@
         <meta name="author" content="gitmobkab">
       
       
+        <link rel="canonical" href="https://gitmobkab.github.io/copia/tui/">
       
+      
+        <link rel="prev" href="../cli/">
+      
+      
+        <link rel="next" href="../dsl/">
       
       
         
       
       
-      <link rel="icon" href="/copia/assets/logo.svg">
+      <link rel="icon" href="../assets/logo.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Copia</title>
+        <title>TUI - Copia</title>
       
     
     
-      <link rel="stylesheet" href="/copia/assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="/copia/assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,15 +55,28 @@
       
     
     
-      <link rel="stylesheet" href="/copia/stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("/copia/",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
-  </head>
+  
+<meta property="og:type" content="website" />
+<meta property="og:title" content="TUI - Copia" />
+<meta property="og:description" content="Interactive TUI database seeder" />
+<meta property="og:image" content="https://gitmobkab.github.io/copia/assets/images/social/tui.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://gitmobkab.github.io/copia/tui/" />
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="TUI - Copia" />
+<meta property="twitter:description" content="Interactive TUI database seeder" />
+<meta property="twitter:image" content="https://gitmobkab.github.io/copia/assets/images/social/tui.png" />
+</head>
   
   
     
@@ -73,6 +92,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#the-tui" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -85,9 +109,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/copia/." title="Copia" class="md-header__button md-logo" aria-label="Copia" data-md-component="logo">
+    <a href=".." title="Copia" class="md-header__button md-logo" aria-label="Copia" data-md-component="logo">
       
-  <img src="/copia/assets/logo.svg" alt="logo">
+  <img src="../assets/logo.svg" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -104,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              TUI
             
           </span>
         </div>
@@ -183,7 +207,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/." class="md-tabs__link">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -202,7 +226,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/installation/" class="md-tabs__link">
+      <a href="../installation/" class="md-tabs__link">
         
   
   
@@ -221,7 +245,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/quickstart/" class="md-tabs__link">
+      <a href="../quickstart/" class="md-tabs__link">
         
   
   
@@ -240,7 +264,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/cli/" class="md-tabs__link">
+      <a href="../cli/" class="md-tabs__link">
         
   
   
@@ -257,9 +281,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="/copia/tui/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -278,7 +304,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/dsl/" class="md-tabs__link">
+      <a href="../dsl/" class="md-tabs__link">
         
   
   
@@ -297,7 +323,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/configuration/" class="md-tabs__link">
+      <a href="../configuration/" class="md-tabs__link">
         
   
   
@@ -318,7 +344,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="/copia/generators/" class="md-tabs__link">
+        <a href="../generators/" class="md-tabs__link">
           
   
   
@@ -340,7 +366,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="/copia/blog/" class="md-tabs__link">
+        <a href="../blog/" class="md-tabs__link">
           
   
   
@@ -360,7 +386,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="/copia/changelog/" class="md-tabs__link">
+      <a href="../changelog/" class="md-tabs__link">
         
   
   
@@ -403,9 +429,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/copia/." title="Copia" class="md-nav__button md-logo" aria-label="Copia" data-md-component="logo">
+    <a href=".." title="Copia" class="md-nav__button md-logo" aria-label="Copia" data-md-component="logo">
       
-  <img src="/copia/assets/logo.svg" alt="logo">
+  <img src="../assets/logo.svg" alt="logo">
 
     </a>
     Copia
@@ -432,7 +458,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -459,7 +485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -486,7 +512,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/quickstart/" class="md-nav__link">
+      <a href="../quickstart/" class="md-nav__link">
         
   
   
@@ -513,7 +539,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/cli/" class="md-nav__link">
+      <a href="../cli/" class="md-nav__link">
         
   
   
@@ -537,10 +563,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/copia/tui/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TUI
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -556,6 +609,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflow
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-select-a-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Select a table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-write-your-seed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Write your seed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-set-the-row-count" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Set the row count
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-submit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Submit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keybindings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Keybindings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#help-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Help screen
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -567,7 +745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/dsl/" class="md-nav__link">
+      <a href="../dsl/" class="md-nav__link">
         
   
   
@@ -594,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -696,7 +874,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="/copia/generators/" class="md-nav__link ">
+            <a href="../generators/" class="md-nav__link ">
               
   
   
@@ -740,7 +918,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/address/" class="md-nav__link">
+      <a href="../generators/address/" class="md-nav__link">
         
   
   
@@ -768,7 +946,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/city/" class="md-nav__link">
+      <a href="../generators/city/" class="md-nav__link">
         
   
   
@@ -796,7 +974,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/country/" class="md-nav__link">
+      <a href="../generators/country/" class="md-nav__link">
         
   
   
@@ -824,7 +1002,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/date_of_birth/" class="md-nav__link">
+      <a href="../generators/date_of_birth/" class="md-nav__link">
         
   
   
@@ -852,7 +1030,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/email/" class="md-nav__link">
+      <a href="../generators/email/" class="md-nav__link">
         
   
   
@@ -880,7 +1058,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/enum/" class="md-nav__link">
+      <a href="../generators/enum/" class="md-nav__link">
         
   
   
@@ -908,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/firstname/" class="md-nav__link">
+      <a href="../generators/firstname/" class="md-nav__link">
         
   
   
@@ -936,7 +1114,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/future_date/" class="md-nav__link">
+      <a href="../generators/future_date/" class="md-nav__link">
         
   
   
@@ -964,7 +1142,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/ipv4/" class="md-nav__link">
+      <a href="../generators/ipv4/" class="md-nav__link">
         
   
   
@@ -992,7 +1170,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/ipv6/" class="md-nav__link">
+      <a href="../generators/ipv6/" class="md-nav__link">
         
   
   
@@ -1020,7 +1198,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/lastname/" class="md-nav__link">
+      <a href="../generators/lastname/" class="md-nav__link">
         
   
   
@@ -1048,7 +1226,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/name/" class="md-nav__link">
+      <a href="../generators/name/" class="md-nav__link">
         
   
   
@@ -1076,7 +1254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/paragraph/" class="md-nav__link">
+      <a href="../generators/paragraph/" class="md-nav__link">
         
   
   
@@ -1104,7 +1282,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/password/" class="md-nav__link">
+      <a href="../generators/password/" class="md-nav__link">
         
   
   
@@ -1132,7 +1310,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/past_date/" class="md-nav__link">
+      <a href="../generators/past_date/" class="md-nav__link">
         
   
   
@@ -1160,7 +1338,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/phone/" class="md-nav__link">
+      <a href="../generators/phone/" class="md-nav__link">
         
   
   
@@ -1188,7 +1366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/ranged_float/" class="md-nav__link">
+      <a href="../generators/ranged_float/" class="md-nav__link">
         
   
   
@@ -1216,7 +1394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/ranged_int/" class="md-nav__link">
+      <a href="../generators/ranged_int/" class="md-nav__link">
         
   
   
@@ -1244,7 +1422,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/ref/" class="md-nav__link">
+      <a href="../generators/ref/" class="md-nav__link">
         
   
   
@@ -1272,7 +1450,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/sentence/" class="md-nav__link">
+      <a href="../generators/sentence/" class="md-nav__link">
         
   
   
@@ -1300,7 +1478,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/url/" class="md-nav__link">
+      <a href="../generators/url/" class="md-nav__link">
         
   
   
@@ -1328,7 +1506,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/user_agent/" class="md-nav__link">
+      <a href="../generators/user_agent/" class="md-nav__link">
         
   
   
@@ -1356,7 +1534,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/username/" class="md-nav__link">
+      <a href="../generators/username/" class="md-nav__link">
         
   
   
@@ -1384,7 +1562,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/uuid/" class="md-nav__link">
+      <a href="../generators/uuid/" class="md-nav__link">
         
   
   
@@ -1412,7 +1590,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/word/" class="md-nav__link">
+      <a href="../generators/word/" class="md-nav__link">
         
   
   
@@ -1440,7 +1618,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/generators/zipcode/" class="md-nav__link">
+      <a href="../generators/zipcode/" class="md-nav__link">
         
   
   
@@ -1502,7 +1680,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="/copia/blog/" class="md-nav__link ">
+            <a href="../blog/" class="md-nav__link ">
               
   
   
@@ -1604,7 +1782,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/blog/archive/2026/" class="md-nav__link">
+      <a href="../blog/archive/2026/" class="md-nav__link">
         
   
   
@@ -1698,7 +1876,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/blog/category/blog/" class="md-nav__link">
+      <a href="../blog/category/blog/" class="md-nav__link">
         
   
   
@@ -1741,7 +1919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/copia/changelog/" class="md-nav__link">
+      <a href="../changelog/" class="md-nav__link">
         
   
   
@@ -1774,8 +1952,107 @@
               
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+
+  
+  
+
+
+<h1 id="the-tui">The TUI</h1>
+<p>Copia ships with a fully interactive terminal interface. Once launched, everything happens inside the TUI — no extra commands needed.</p>
+<hr />
+<h2 id="layout">Layout</h2>
+<p>The interface is divided into three areas:</p>
+<p><img alt="Copia TUI layout" src="../assets/tui_layout.png" /></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────┬──────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                 │  Copia DSL Editor                │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│  Database tree  │                                  │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│                 ├──────────────────────────────────┤
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│                 │  Action bar (table, rows, buttons)│
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│                 ├──────────────────────────────────┤
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│                 │  Results viewer (logs / results) │
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└─────────────────┴──────────────────────────────────┘
+</code></pre></div>
+<p><strong>Database tree</strong> — lists all tables in your database. Expand a table to see its columns and their types. Click a table to select it as the insert target.</p>
+<p><strong>DSL Editor</strong> — write your seed definition here. One line per column, using the Copia DSL.</p>
+<p><strong>Action bar</strong> — shows the selected table, a row count input, and the Run and Submit buttons.</p>
+<p><strong>Results viewer</strong> — displays logs and generated rows. Switch between the <code>logs</code> and <code>results</code> tabs.</p>
+<hr />
+<h2 id="workflow">Workflow</h2>
+<p><img alt="Copia TUI workflow" src="../assets/tui_workflow.png" /></p>
+<h3 id="1-select-a-table">1. Select a table</h3>
+<p>Click a table in the database tree on the left. Its name will appear in the action bar. Expanding the table shows its columns and types — useful for knowing which generators to use.</p>
+<h3 id="2-write-your-seed">2. Write your seed</h3>
+<p>Type your seed definition in the DSL editor:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>id:         uuid()
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>username:   username()
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>email:      email(safe=True)
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>password:   password(length=16)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>created_at: past_date()
+</code></pre></div>
+<p>Press <code>?</code> to open the help screen — it lists all available generators and the full DSL reference.</p>
+<h3 id="3-set-the-row-count">3. Set the row count</h3>
+<p>In the action bar, set how many rows you want to generate. Defaults to <code>1</code>.</p>
+<h3 id="4-run">4. Run</h3>
+<p>Click <strong>Run</strong>. Copia parses your input, validates it, and streams the generated rows into the results viewer. Switch to the <code>results</code> tab to preview the data.</p>
+<p>If generation is taking too long, a <strong>Cancel</strong> button appears to stop it mid-stream.</p>
+<h3 id="5-submit">5. Submit</h3>
+<p>Once satisfied with the preview, click <strong>Submit</strong>. Copia inserts the generated rows into the selected table.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Anonymous columns (columns without a name, e.g. <code>: uuid()</code>) cannot be submitted — copia has no way to map them to a real column. Name all columns before submitting.</p>
+</div>
+<hr />
+<h2 id="keybindings">Keybindings</h2>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>?</code></td>
+<td>Open the help screen</td>
+</tr>
+<tr>
+<td><code>Escape</code></td>
+<td>Close the help screen</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>Quit copia</td>
+</tr>
+<tr>
+<td><code>^p</code></td>
+<td>Open the command palette</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="help-screen">Help screen</h2>
+<p><img alt="Help screen" src="../assets/tui_help.png" /></p>
+<p>Press <code>?</code> at any time to open the help screen. It contains:</p>
+<ul>
+<li>The full <strong>DSL reference</strong> — syntax, argument types, examples</li>
+<li>The <strong>generators reference</strong> — every available generator with its signature, parameters, and return type</li>
+</ul>
+<p>Press <code>Escape</code> or <code>q</code> to close it and return to the editor.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1812,10 +2089,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "/copia/", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.indexes", "toc.integrate", "content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.tabs.sticky"], "search": "/copia/assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.indexes", "toc.integrate", "content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.tabs.sticky"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="/copia/assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
