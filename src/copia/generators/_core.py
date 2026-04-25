@@ -1,22 +1,30 @@
 from faker import Faker
 from faker.config import AVAILABLE_LOCALES
+from dataclasses import dataclass
 
 _fake = Faker()
 """global faker instance for all generators based on faker"""
 
-def update_global_faker(locale: str = "en_US", use_weighting: bool = True) -> None:
-    """replace the global faker object with a new on
+@dataclass
+class GenerationSettings:
+    locale: str = "en_US"
+    """the locale to use, this will only influence faker based generators"""
+    optimized: bool = False
+    """if true, this will disable weighting of the values.
+    Effectively increasing performance but losing real-world frequencies.
+    """
+
+def update_global_faker(generation_settings: GenerationSettings) -> None:
+    """replace the global faker object with a new one
 
     Args:
-        locale (str, optional): the locale to use for the next generations. Defaults to "en_US".
-        use_weighting (bool, optional): if faker should weight the values to generate.
-            this will improve the speed of generation, but the datasets will be completly random.
-            See https://faker.readthedocs.io/en/master/#optimizations.
-            Defaults to True.
+        generation_settings (GenerationSettings): the new generation settings
 
     Raises:
-        ValueError: if the locale isn't supported by faker
+        ValueError: if the locale key of the generation settings isn't supported by faker
     """
+    locale = generation_settings.locale
+    use_weighting = not generation_settings.optimized
     if locale not in AVAILABLE_LOCALES:
         raise ValueError(f"{locale!r} is not in fakers availables locals")
     global _fake
