@@ -17,3 +17,8 @@ wheels/
 
 # material for Mkdocs cache
 .cache/
+
+# no need to track those they are build with the CI
+docs/generators/*
+docs/dsl.md
+docs/changelog.md
