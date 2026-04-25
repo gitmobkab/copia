@@ -1,5 +1,3 @@
-from random import randint
-
 from textual.widgets import Tree
 from sqlalchemy import Engine, Inspector, inspect
 
