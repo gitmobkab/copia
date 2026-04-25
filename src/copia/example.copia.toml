@@ -1,9 +1,11 @@
 # if you're using an editor that supports taplo (https://taplo.tamasfe.dev/)
-# we advice you to reference copia config file scheme: https://github.com... for improved editing
+# we advice you to reference copia config file schema in your settings
+# schema: https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json
+# configuration documentation: https://gitmobkab.github.io/copia/configuration/
 
 # This is an example of a copia config file
-# if you have no experience with copia, see https://github.com... 
-# you can also check the config file documentation at https://github.com...
+# if you have no experience with copia, see https://gitmobkab.github.io/copia/
+# you can also check the config file documentation at https://gitmobkab.github.io/copia/configuation/
 
 
 [profiles.default]
