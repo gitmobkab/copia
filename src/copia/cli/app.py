@@ -56,6 +56,7 @@ def main(
     profile = None
     try:
         if search_globals_only and search_locals_only:
+            echo("[red]Cannot use --global | -g and --local | -l at the same time")
             raise typer.Exit()
 
         if search_globals_only:
@@ -76,8 +77,6 @@ def main(
         engine = create_profile_engine(profile)
         verify_engine_connection(engine)
         echo("[green]Connection to db successfull")
-    except ModuleNotFoundError:
-        echo("[red]Error: Missing dependency for postgres, try pip install copia[postgres]")
     except Exception as connection_err:
         print_error(connection_err)
         raise typer.Exit(ExitCodes.CONNEXION_TO_DB_FAILED)
@@ -86,7 +85,7 @@ def main(
         CopiaApp(engine).run()
         echo("[bold green]Bye.")
     except Exception as err:
-        print_error(err, "Something unexpected while running the tui...")
+        print_error(err, "Something unexpected occurred while running the tui...")
         
             
 def get_any_profile(profile_name: str):
