@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Callable
 from .exceptions import GeneratorValueError
 from ._documentation import generate_generators_markdown
+from ._core import GenerationSettings, update_global_faker
 
 def _build_generators_registery() -> dict[str, Callable]:
     generators : dict[str, Callable] = {}
