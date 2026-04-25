@@ -23,7 +23,9 @@ theme:
     - navigation.indexes
     - toc.integrate
     - content.code.copy
+    - content.code.annotate
     - navigation.tabs
+    - navigation.tabs.sticky
 
 hooks:
   - hooks/dsl_hook.py
@@ -37,8 +39,10 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Quickstart: quickstart.md
+  - CLI: cli.md
+  - TUI: tui.md
   - DSL Reference: dsl.md
-  - Configuration: configuration.md
+  - Configuration: configuration/index.md
   - Generators: 
     - generators/index.md
   - Blog:
@@ -50,6 +54,7 @@ markdown_extensions:
   - admonition
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.inlinehilite
   - pymdownx.tabbed:
