@@ -3,6 +3,9 @@ from .exceptions import GeneratorValueError
 
 def ranged_int(min: int = 0, max: int = 100) -> int:
     """Generate a random integer within a range.
+        
+    Locale dependent:
+        no
  
     Args:
         min: Lower bound (inclusive). Defaults to 0.
@@ -14,6 +17,9 @@ def ranged_int(min: int = 0, max: int = 100) -> int:
 
 def ranged_float(min: float = 0.0, max: float = 100.0) -> float:
     """Generate a random float within a range.
+        
+    Locale dependent:
+        no
  
     Args:
         min: Lower bound (inclusive). Defaults to 0.0.

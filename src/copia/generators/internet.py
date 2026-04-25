@@ -5,7 +5,11 @@ from .exceptions import GeneratorValueError
 
 
 def url() -> str:
-    """Generate a random URL."""
+    """Generate a random URL.
+        
+    Locale dependent:
+        yes
+    """
     return get_faker().url()
 
 def ipv4(
@@ -13,6 +17,9 @@ def ipv4(
        address_class: Literal["a", "b", "c"] = "c", 
        private: bool = False) -> str:
     """Generate a random IPv4 address.
+    
+    Locale dependent:
+        no
  
     Args:
         network: Return a network address with CIDR notation (e.g. 192.168.0.0/24).
@@ -36,6 +43,9 @@ def ipv4(
 def ipv6(network: bool = False ) -> str:
     """Generate a random IPv6 address.
  
+    Locale dependent:
+        no
+        
     Args:
         network: Return a network address with prefix length notation.
             Defaults to False.
@@ -43,5 +53,9 @@ def ipv6(network: bool = False ) -> str:
     return get_faker().ipv6(network)
 
 def user_agent() -> str:
-    """Generate a random browser user agent string."""
+    """Generate a random browser user agent string.
+        
+    Locale dependent:
+        no
+    """
     return get_faker().user_agent()

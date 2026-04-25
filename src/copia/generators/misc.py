@@ -7,13 +7,20 @@ from copia.parser.models import TYPES
 
 
 def uuid() -> str:
-    """Generate a random UUID v4 as a string."""
+    """Generate a random UUID v4 as a string.
+        
+    Locale dependent:
+        no
+    """
     return get_faker().uuid4()
 
 
 def enum(*args) -> TYPES:
     """Pick a random value from a fixed set of choices.
- 
+    
+    Locale dependent:
+        no
+
     Args:
         *args: The values to sample from. At least one value required.
     """
@@ -23,6 +30,9 @@ def enum(*args) -> TYPES:
 
 def ref(column: str) -> Any:
     """Fetch a random existing value from a database column.
+        
+    Locale dependent:
+        no
  
     Args:
         column: Column reference in 'table.column' format.

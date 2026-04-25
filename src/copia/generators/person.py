@@ -5,6 +5,10 @@ from .exceptions import GeneratorValueError
 
 def name(gender: Literal["male","female", "nonbinary", "all"] = "all") -> str:
     """Generate a full name (first + last).
+    
+        
+    Locale dependent:
+        yes
  
     Args:
         gender: Filter names by gender. Use 'all' for any gender.
@@ -16,7 +20,10 @@ def name(gender: Literal["male","female", "nonbinary", "all"] = "all") -> str:
 
 def firstname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> str:
     """Generate a random first name.
- 
+        
+    Locale dependent:
+        no
+
     Args:
         gender: Filter names by gender. Use 'all' for any gender.
             Defaults to 'all'.
@@ -37,6 +44,9 @@ def firstname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> 
 
 def lastname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> str:
     """Generate a random last name.
+    
+    Locale dependent:
+        no
  
     Args:
         gender: Filter names by gender. Use 'all' for any gender.
@@ -56,11 +66,18 @@ def lastname(gender: Literal["male", "female", "nonbinary" ,"all"] = "all") -> s
             raise GeneratorValueError(f"{gender} is not an available gender")
 
 def phone() -> str:
-    """Generate a random phone number."""
+    """Generate a random phone number.
+        
+    Locale dependent:
+        yes
+    """
     return get_faker().phone_number()
 
 def email(safe : bool = True, domain: str = "") -> str:
     """Generate a random email address.
+ 
+    Locale dependent:
+        yes
  
     Args:
         safe: If True, uses safe domains (example.com, test.com) that
@@ -76,7 +93,11 @@ def email(safe : bool = True, domain: str = "") -> str:
     return fake.email(safe, final_domain)
 
 def username() -> str:
-    """Generate a random username."""
+    """Generate a random username.
+        
+    Locale dependent:
+        yes
+    """
     return get_faker().user_name()
 
 def password(length: int = 12,
@@ -84,7 +105,10 @@ def password(length: int = 12,
              upper_case: bool = False,
              lower_case: bool = False) -> str:
     """Generate a random password.
- 
+    
+    Locale dependent:
+        no
+
     Args:
         length: Number of characters in the password. Defaults to 12.
         special_chars: Include special characters (!@#...). Defaults to True.

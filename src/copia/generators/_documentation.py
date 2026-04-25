@@ -1,7 +1,14 @@
 import inspect
 import textwrap
-from typing import Callable, get_args, get_origin, Literal
+from typing import Callable, get_args, get_origin, Literal, TypedDict
 
+
+class ParsedDocstring(TypedDict):
+    description: str
+    locale: bool
+    args: dict[str, str]
+    returns: str
+    note: str
 
 def _format_type(annotation) -> str:
     """Format a type annotation as a readable string."""
@@ -23,9 +30,15 @@ def _format_default(default: inspect.Parameter) -> str:
     return str(default)
 
 
-def _parse_docstring(doc: str) -> dict:
+def _parse_docstring(doc: str) -> ParsedDocstring:
     """Parse a Google-style docstring into sections."""
-    result = {"description": "", "args": {}, "returns": "", "note": ""}
+    result = ParsedDocstring(
+        description="",
+        locale=False,
+        args={},
+        returns="",
+        note=""
+    )
 
     if not doc:
         result["description"] = "No description provided"
@@ -39,38 +52,42 @@ def _parse_docstring(doc: str) -> dict:
     arg_name = None
 
     for line in lines:
-        stripped = line.strip()
+        stripped_line = line.strip()
 
-        if stripped.lower() in ("args:", "returns:" ,"note:"):
+        if stripped_line.lower() in ( "locale dependent:", "args:", "returns:" ,"note:"):
             if section == "description":
                 result["description"] = " ".join(desc_lines).strip()
-            section = stripped[:-1].lower()
+            section = stripped_line[:-1].lower()
             continue
 
         if section == "description":
-            if stripped:
-                desc_lines.append(stripped)
+            if stripped_line:
+                desc_lines.append(stripped_line)
 
+        elif section == "locale dependent":
+            if stripped_line:
+                result["locale"] = stripped_line.lower() == "yes"
+                
         elif section == "args":
             # Each arg line: "    param: Description."
             # Continuation lines are indented further
-            if stripped and not line.startswith("\t\t"):
+            if stripped_line and not line.startswith("\t\t"):
                 # New arg
-                if ":" in stripped:
-                    arg_name, arg_desc = stripped.split(":", 1)
+                if ":" in stripped_line:
+                    arg_name, arg_desc = stripped_line.split(":", 1)
                     arg_name = arg_name.strip()
                     result["args"][arg_name] = arg_desc.strip()
-            elif stripped and arg_name:
+            elif stripped_line and arg_name:
                 # Continuation of previous arg description
-                result["args"][arg_name] += " " + stripped
+                result["args"][arg_name] += " " + stripped_line
 
         elif section == "returns":
-            if stripped:
-                result["returns"] += (" " if result["returns"] else "") + stripped
+            if stripped_line:
+                result["returns"] += (" " if result["returns"] else "") + stripped_line
 
         elif section == "note":
-            if stripped:
-                result["note"] += (" " if result["note"] else "") + stripped
+            if stripped_line:
+                result["note"] += (" " if result["note"] else "") + stripped_line
 
 
     if section == "description":
@@ -99,6 +116,10 @@ def _build_signature(name: str, sig: inspect.Signature) -> str:
 
     return f"{name}({', '.join(parts)}){return_str}"
 
+def _build_locale_note(locale: bool) -> str:
+    """Build a note about locale dependence."""
+    checkbox = "[x]" if locale else "[ ]"
+    return f"{checkbox} Locale dependent"
 
 def _build_args_table(sig: inspect.Signature, parsed_args: dict) -> str:
     """Build the markdown arguments table."""
@@ -176,6 +197,9 @@ def generate_generator_markdown(name: str, func: Callable, page_mode: bool = Fal
 
     if parsed["description"]:
         block.append(parsed["description"] + "\n")
+    
+    locale_note = _build_locale_note(parsed["locale"])
+    block.append(f"- {locale_note}\n")
 
     args_table = _build_args_table(sig, parsed["args"])
     if args_table:
