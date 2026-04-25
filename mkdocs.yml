@@ -54,6 +54,8 @@ markdown_extensions:
   - admonition
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.snippets
   - pymdownx.superfences
   - pymdownx.inlinehilite
