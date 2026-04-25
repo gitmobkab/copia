@@ -45,6 +45,7 @@ All fields are required except `password`, which defaults to an empty string.
 
 ### `adapter`
 
+
 The database adapter to use.
 
 | Value | Database |
@@ -74,8 +75,13 @@ host = "::1"
 The port number. Must be a valid port (1–65535).
 
 ```toml
-port = 3306
+port = 3306 # ✅ (1)
+port = "5432" # ❌ (2)
 ```
+
+1. Valid — Since copia explicitly requires an integer, this is accepted as a number.
+2. Invalid — This is a string, not an integer. Copia will raise an error.
+
 
 ### `database`
 
@@ -172,4 +178,29 @@ Non-ASCII characters — including accented letters and Unicode — will be reje
 ```toml
 user = "rené"   # ❌ invalid
 user = "rene"   # ✓
+```
+
+!!! note "This might change in the future"
+    The ASCII constraint is a temporary measure to ensure compatibility with all database servers. Future versions of Copia may remove this requirement.
+
+## Editing the config file
+
+copia does not provide built-in commands for editing the config file. Use your preferred text editor to modify the TOML file directly.
+
+however if your IDE supports [taplo](https://taplo.tamasfe.dev/) or [Even Better TOML on vscode](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml), you can edit the settings to use copia's schema for autocompletion and validation:
+
+for example, in vscode, add the following to your `.vscode/settings.json`:
+```json title=".vscode/settings.json"
+{
+  "evenBetterToml.schema.associations": {
+    "**/.copia.toml": "https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json",
+    "**/copia/profiles.toml": "https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json"
+  }
+}
+```
+
+### Schema
+
+```json title="schema.json"
+--8<-- "docs/configuration/schema.json"
 ```
