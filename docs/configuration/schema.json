@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json",
+  "title": "Copia Configuration",
+  "description": "Configuration schema for copia — https://gitmobkab.github.io/copia/configuration",
+  "type": "object",
+  "properties": {
+    "profiles": {
+      "type": "object",
+      "description": "Named database connection profiles.",
+      "additionalProperties": {
+        "$ref": "#/$defs/Profile"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "Profile": {
+      "type": "object",
+      "description": "A database connection profile.",
+      "required": ["adapter", "host", "port", "database", "user"],
+      "additionalProperties": false,
+      "properties": {
+        "adapter": {
+          "type": "string",
+          "description": "The database adapter to use.",
+          "enum": ["mysql"],
+          "enumDescriptions": [
+            "MySQL / MariaDB"
+          ]
+        },
+        "host": {
+          "type": "string",
+          "description": "Database host. Accepts a hostname, IPv4, or IPv6 address.",
+          "examples": ["localhost", "127.0.0.1", "db.example.com"]
+        },
+        "port": {
+          "type": "integer",
+          "description": "Database port. Must be between 1 and 65535.",
+          "minimum": 1,
+          "maximum": 65535,
+          "examples": [3306]
+        },
+        "database": {
+          "type": "string",
+          "description": "Target database name. Must be non-empty and ASCII only.",
+          "minLength": 1
+        },
+        "user": {
+          "type": "string",
+          "description": "Database user. Must be non-empty and ASCII only.",
+          "minLength": 1
+        },
+        "password": {
+          "type": "string",
+          "description": "Database password. Optional — defaults to empty string.",
+          "default": ""
+        }
+      }
+    }
+  }
+}
