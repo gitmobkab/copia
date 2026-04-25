@@ -106,14 +106,12 @@ class ActionBar(Widget):
         hint_label = self.query_one("#hint-msg", Label)
         if table is None:
             label.update("No table selected...")
-            label.remove_class("selected")
             self.query_one("#submit-btn", Button).disabled = True
-            hint_label.content = "select a table to use 'submit'"
+            hint_label.update("select a table to use 'submit'")
         else:
             label.update(table)
-            label.add_class("selected")
             self.query_one("#submit-btn", Button).disabled = False
-            hint_label.content = ""
+            hint_label.update("")
 
     def show_cancel_btn(self) -> None:
         buttons = self.query(Button)
@@ -153,6 +151,7 @@ class ActionBar(Widget):
 
     def post_submit_requested(self) -> None:
         if self.selected_table is None:
+            self.app.notify("Please select a table first")
             return
         self.post_message(self.SubmitRequested(self.selected_table))
 
@@ -183,14 +182,14 @@ class ActionBar(Widget):
         try:
             converted_value = int(event.input.value)
             if converted_value == 0:
-                hint_label.content = "rows must be greater than 0"
+                hint_label.update("rows must be greater than 0")
                 event.input.add_class("invalid")
                 self.disable_buttons()
                 return
-            hint_label.content = ""  
+            hint_label.update("")
             event.input.remove_class("invalid")
             self.enable_buttons()
         except ValueError:
-            hint_label.content = "Please enter a valid integer in the rows input"
+            hint_label.update("Please enter a valid integer in the rows input")
             event.input.add_class("invalid")
             self.disable_buttons()
