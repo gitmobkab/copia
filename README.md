@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/logo.svg" width="80" alt="Copia logo">
+  <img src="https://raw.githubusercontent.com/gitmobkab/copia/main/docs/assets/logo.svg" width="120" alt="Copia logo">
 </p>
 
 <h1 align="center" style="color:#4caf6e;">Copia</h1>
