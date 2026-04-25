@@ -10,12 +10,17 @@ from textual.message import Message
 from copia.parser import parse
 from copia.parser.models import Column
 from copia.validator import SemanticValidator
-from copia.generators import GENERATORS_REGISTRY, GeneratorValueError
+from copia.generators import (
+    GENERATORS_REGISTRY,
+    GeneratorValueError,
+    GenerationSettings,
+    update_global_faker
+)
 from copia.runners import generate_rows
 from copia.submit import submit_rows
 
 from .widgets import CopiaEditor, ActionBar, ResultsViewer
-from .screens import HelpScreen
+from .screens import HelpScreen, GenerationSettingsScreen
 from .utils import build_database_tables_tree
 from .theme import COPIA_THEME
 
@@ -24,7 +29,8 @@ class CopiaApp(App):
     SCREENS = {"help": HelpScreen}
     BINDINGS = [
         ("?", "push_screen('help')", "show help screen"),
-        ("q", "quit", "Close the app")
+        ("q", "quit", "Close the app"),
+        ("s", "generation_settings", "open generation settings")
                 ]
     CSS_PATH="style.tcss"
     
@@ -59,6 +65,7 @@ class CopiaApp(App):
         self._inspector = inspect(engine)
         self._connection : Connection = engine.connect()
         self._cancel_requested = Event()
+        self._generation_settings = GenerationSettings()
         super().__init__()
         
     def on_mount(self) -> None:
@@ -80,6 +87,13 @@ class CopiaApp(App):
     def update_selected_table(self, event: Tree.NodeSelected) -> None:
         action_bar = self.query_one(ActionBar)
         action_bar.selected_table = event.node.data
+    
+    def action_generation_settings(self) -> None:
+        def on_close(settings: GenerationSettings | None) -> None:
+            if settings:
+                update_global_faker(settings)
+                self._generation_settings = settings
+        self.push_screen(GenerationSettingsScreen(self._generation_settings), on_close)
             
     @on(ActionBar.RunRequested)
     def run_user_query(self, event: ActionBar.RunRequested) -> None:
