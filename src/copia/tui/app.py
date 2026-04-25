@@ -53,20 +53,18 @@ class CopiaApp(App):
             super().__init__()
             self.error = error
     
-    def __init__(self, engine: Engine | None = None):
+    def __init__(self, engine: Engine):
         self.engine = engine
         self._validator = SemanticValidator(GENERATORS_REGISTRY)
-        self._inspector = inspect(engine, False)
-        self._connection : Connection | None = None
+        self._inspector = inspect(engine)
+        self._connection : Connection = engine.connect()
         self._cancel_requested = Event()
         super().__init__()
         
     def on_mount(self) -> None:
         self.register_theme(COPIA_THEME)
         self.theme = "copia"
-        if self.engine:
-            self._connection = self.engine.connect()
-            self.notify("Connection to database established")
+        self.notify("Connection to database established")
     
     def compose(self) -> ComposeResult:
         with HorizontalGroup():
@@ -80,11 +78,8 @@ class CopiaApp(App):
                 
     @on(Tree.NodeSelected, "#db-tree")
     def update_selected_table(self, event: Tree.NodeSelected) -> None:
-            if event.node.data is None:
-                print(f"No data available for node with id: {event.node.id}")
-                return
-            action_bar = self.query_one(ActionBar)
-            action_bar.selected_table = event.node.data
+        action_bar = self.query_one(ActionBar)
+        action_bar.selected_table = event.node.data
             
     @on(ActionBar.RunRequested)
     def run_user_query(self, event: ActionBar.RunRequested) -> None:
@@ -123,9 +118,6 @@ class CopiaApp(App):
         
     @work(thread=True)
     def commit_rows(self, rows: list[dict], table_name: str):
-        if self.engine is None:
-            self.query_one(ResultsViewer).error("There's no engine set, action impossible (if you're using textual_console, consider lauching copia directly)")
-            return
         try:
             submit_rows(self.engine, rows, table_name)
             self.post_message(self.SubmitSucceeded(len(rows)))
