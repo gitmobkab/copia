@@ -2458,15 +2458,11 @@ Non-ASCII characters — including accented letters and Unicode — will be reje
 </div>
 <h2 id="editing-the-config-file">Editing the config file</h2>
 <p>copia does not provide built-in commands for editing the config file. Use your preferred text editor to modify the TOML file directly.</p>
-<p>however if your IDE supports <a href="https://taplo.tamasfe.dev/">taplo</a> or <a href="https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml">Even Better TOML on vscode</a>, you can edit the settings to use copia's schema for autocompletion and validation:</p>
-<p>for example, in vscode, add the following to your <code>.vscode/settings.json</code>:
-<div class="highlight"><span class="filename">.vscode/settings.json</span><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
-<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;evenBetterToml.schema.associations&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="nt">&quot;**/.copia.toml&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json&quot;</span><span class="p">,</span>
-<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nt">&quot;**/copia/profiles.toml&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json&quot;</span>
-<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="p">}</span>
-<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">}</span>
-</code></pre></div></p>
+<p>however if your IDE supports <a href="https://taplo.tamasfe.dev/">taplo</a> or <a href="https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml">Even Better TOML on vscode</a>.</p>
+<p>Add this line at the top of your <code>.copia.toml</code> or <code>profiles.toml</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">#:schema https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json</span>
+</code></pre></div>
+<p>This works with any editor that supports <a href="https://taplo.tamasfe.dev/">Taplo</a> — VSCode with Even Better TOML, Neovim, and others.</p>
 <h3 id="schema">Schema</h3>
 <div class="highlight"><span class="filename">schema.json</span><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">{</span>
 <a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span><span class="nt">&quot;$schema&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://json-schema.org/draft-07/schema#&quot;</span><span class="p">,</span>
