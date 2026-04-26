@@ -195,7 +195,6 @@ Add this line at the top of your `.copia.toml` or `profiles.toml`:
 #:schema https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json
 ```
 
-This works with any editor that supports [Taplo](https://taplo.tamasfe.dev/) — VSCode with Even Better TOML, Neovim, and others.
 ### Schema
 
 ```json title="schema.json"
