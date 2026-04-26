@@ -48,6 +48,13 @@ nav:
   - Blog:
     - blog/index.md
   - Changelog: changelog.md
+  - Developer Guide:
+    - dev/index.md
+    - dev/generators.md
+    - dev/docstrings.md
+    - dev/generators_registry.md
+    - dev/validator.md
+    - dev/ref.md
     
 
 markdown_extensions:
