@@ -187,18 +187,15 @@ user = "rene"   # ✓
 
 copia does not provide built-in commands for editing the config file. Use your preferred text editor to modify the TOML file directly.
 
-however if your IDE supports [taplo](https://taplo.tamasfe.dev/) or [Even Better TOML on vscode](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml), you can edit the settings to use copia's schema for autocompletion and validation:
+however if your IDE supports [taplo](https://taplo.tamasfe.dev/) or [Even Better TOML on vscode](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml).
 
-for example, in vscode, add the following to your `.vscode/settings.json`:
-```json title=".vscode/settings.json"
-{
-  "evenBetterToml.schema.associations": {
-    "**/.copia.toml": "https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json",
-    "**/copia/profiles.toml": "https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json"
-  }
-}
+Add this line at the top of your `.copia.toml` or `profiles.toml`:
+
+```toml
+#:schema https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json
 ```
 
+This works with any editor that supports [Taplo](https://taplo.tamasfe.dev/) — VSCode with Even Better TOML, Neovim, and others.
 ### Schema
 
 ```json title="schema.json"
