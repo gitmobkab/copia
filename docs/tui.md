@@ -72,6 +72,21 @@ Once satisfied with the preview, click **Submit**. Copia inserts the generated r
 
 ---
 
+## Generation Settings
+
+![Generation Settings screen](assets/generation_settings.png)
+ 
+Press `s` to open the Generation Settings screen.
+ 
+**Locale** — sets the locale used by locale-dependent generators. Changing the locale mid-generation affects all rows generated after the change. Defaults to `en_US`.
+ 
+**Fast generation** — when enabled, disables Faker's value weighting. Generation is faster but the dataset no longer follows real-world frequencies. Useful for large row counts where performance matters more than realism.
+ 
+Use **Reset** to revert the controls to the last applied settings. Use **Apply** to confirm. Press `Escape` or click **X** to close without applying.
+ 
+---
+
+
 ## Keybindings
 
 | Key | Action |
