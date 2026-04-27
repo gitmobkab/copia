@@ -14,17 +14,22 @@
 
 ---
 
-**Seed your database without the hassle.**
+<p align="center">
+  <a href="https://gitmobkab.github.io/copia/">
+  <img src="https://raw.githubusercontent.com/gitmobkab/copia/main/docs/assets/tui_layout.png" alt="Copia preview" width="800">
+  </a>
+  <bottom caption align="center">Copia's TUI, showing the editor, preview, and log panels.</bottom>
+</p>
+
+---
+<p align="center"> 
+  <h2 style="color:#4caf6e;">
+    Seed your database without the hassle.
+  </h2>
+</p>
 
 Most frameworks either ship a seeder with questionable decisions, or don't ship one at all. Copia is a TUI-based database seeder with its own declarative language — you describe what data you want, column by column, and Copia generates and inserts it.
 
-```
-id:         uuid()
-username:   username()
-email:      email(safe=True)
-role:       enum('admin', 'editor', 'viewer')
-created_at: past_date()
-```
 
 ---
 
