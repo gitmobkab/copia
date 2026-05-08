@@ -5,7 +5,7 @@ from rich.prompt import Confirm
 import typer
 
 from copia.cli.exit_codes import ExitCodes
-from copia.cli.console_utils import echo, print_error
+from copia.cli.console_utils import echo, print_error, info, warning, success
 from ..config.loaders import (
     resolve_config_path
 )
@@ -34,21 +34,22 @@ def main(ctx: typer.Context,
         config_path = resolve_config_path("local")
     
 
-    echo("[blue dim]Loading example config content...")
+    info("Loading example config content...")
     example = files("copia").joinpath("example.copia.toml").read_text()
 
     if config_path.exists():
-        echo("[yellow]:warning: Config file already exists!")
+        warning("Config file already exists!")
         if not Confirm.ask("Overwrite the previous file?"):
             raise typer.Abort()
 
     try:
-        echo(f"Writing example file to '{config_path}'...")
+        info(f"Writing example file to '{config_path}'...")
         config_path.parent.mkdir(parents=True, exist_ok=True)
         config_path.write_text(example)
-        echo("[green]Done.")
+        success("Done.")
     except (PermissionError) as err:
         print_error(err, help_msg="you don't have enough 'permissions' to create the config file")
+        raise typer.Exit(ExitCodes.RESOURCE_ERROR)
     except Exception as err:
         echo(f"Something went wrong while writing to '{config_path}'...")
         print_error(err)

@@ -3,15 +3,14 @@ import typer
 from copia._version import __version__
 from .commands import list_app, init_command
 from .exit_codes import ExitCodes
-from ..db import create_profile_engine, verify_engine_connection
+from copia.adapters import get_adapter
 from ..tui import CopiaApp
-from copia.cli.console_utils import print_error, echo
+from copia.cli.console_utils import print_error, info, success, error, echo
 from .config import (
     get_profile,
     LOCAL_COPIA_FILE,
     GLOBAL_COPIA_FILE
 )
-
 
 app = typer.Typer(invoke_without_command=True)
 
@@ -56,7 +55,7 @@ def main(
     profile = None
     try:
         if search_globals_only and search_locals_only:
-            echo("[red]Cannot use --global | -g and --local | -l at the same time")
+            error("Cannot use --global | -g and --local | -l at the same time")
             raise typer.Exit()
 
         if search_globals_only:
@@ -70,20 +69,23 @@ def main(
         raise typer.Exit()
 
 
-    echo(f"[dim]Found profile: {profile}")
-    echo("[dim]Connecting to db...")
+    info(f"Found profile: {profile}")
+    info("Connecting to db...")
     
     try:
-        engine = create_profile_engine(profile)
-        verify_engine_connection(engine)
-        echo("[green]Connection to db successfull")
+        adapter = get_adapter(profile)
+        success("Connection to db successfull")
+    except ImportError:
+        print_error(f"Missing dependencies for adapter {profile.adapter!r}",
+                    f'Try "pip install copia-seed\\[{profile.adapter}]"')
+        raise typer.Exit(ExitCodes.RESOURCE_ERROR)
     except Exception as connection_err:
         print_error(connection_err)
         raise typer.Exit(ExitCodes.CONNEXION_TO_DB_FAILED)
 
     try:
-        CopiaApp(engine).run()
-        echo("[bold green]Bye.")
+        CopiaApp(adapter).run()
+        success("Bye.")
     except Exception as err:
         print_error(err, "Something unexpected occurred while running the tui...")
         
@@ -111,10 +113,10 @@ def get_any_profile(profile_name: str):
         Profile: a valid Profile object
     """
     try:
-        echo(f"[blue]Fetching profiles.\"{profile_name}\" from local config...")
+        info(f"Fetching profiles.\"{profile_name}\" from local config...")
         return get_profile(profile_name, "local")
     except Exception as err:
-        echo(f"[dim red]Error: {err}")
-        echo("[dim]Falling back to global config...")
-        echo(f"[blue]Fetching profiles.\"{profile_name}\" from global config...")
+        error(f"{err}")
+        info("Falling back to global config...")
+        info(f"Fetching profiles.\"{profile_name}\" from global config...")
         return get_profile(profile_name, "global")
