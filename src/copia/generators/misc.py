@@ -1,18 +1,19 @@
 from random import choice
 from typing import Any
+from uuid import UUID
 
 from ._core import get_faker
 from .exceptions import GeneratorValueError
 from copia.parser.models import TYPES
 
 
-def uuid() -> str:
-    """Generate a random UUID v4 as a string.
+def uuid() -> UUID:
+    """Generate a random UUID v4.
         
     Locale dependent:
         no
     """
-    return get_faker().uuid4()
+    return UUID(get_faker().uuid4())
 
 
 def enum(*args) -> TYPES:
