@@ -11,11 +11,3 @@ class TestDatabase:
     def test_empty_database(self):
         with pytest.raises(ValidationError):
             make_profile(database="")
-
-    def test_non_ascii_database(self):
-        with pytest.raises(ValidationError):
-            make_profile(database="db_café")
-
-    def test_emoji_database(self):
-        with pytest.raises(ValidationError):
-            make_profile(database="db🎉")

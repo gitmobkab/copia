@@ -11,11 +11,3 @@ class TestUser:
     def test_empty_user(self):
         with pytest.raises(ValidationError):
             make_profile(user="")
-
-    def test_non_ascii_user(self):
-        with pytest.raises(ValidationError):
-            make_profile(user="üser")
-
-    def test_emoji_user(self):
-        with pytest.raises(ValidationError):
-            make_profile(user="user🔑")

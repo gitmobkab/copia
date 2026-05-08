@@ -1,10 +1,20 @@
 import inspect
 import importlib
 from pathlib import Path
-from typing import Callable
+from typing import get_origin, Callable, Any, Literal # stupid ref and whatever
+from datetime import date
+from uuid import UUID
+
 from .exceptions import GeneratorValueError
 from ._documentation import generate_generators_markdown
 from ._core import GenerationSettings, update_global_faker
+
+from copia.parser.models import TYPES
+
+ALLOWED_INPUT_TYPES = [int, bool, float, str, Literal]
+ALLOWED_RETURN_TYPES = [*ALLOWED_INPUT_TYPES, date, UUID, TYPES, Any]
+ALLOWED_INPUT_ORIGINS = [Literal] # aka typing waky types we can't identify without get_origin
+
 
 def _build_generators_registery() -> dict[str, Callable]:
     generators : dict[str, Callable] = {}
@@ -18,26 +28,75 @@ def _build_generators_registery() -> dict[str, Callable]:
         
         for name, func in inspect.getmembers(module, inspect.isfunction):
             if not name.startswith("_") and func.__module__ == module.__name__:
-                if generators.get(name):
-                    raise ImportWarning(f"found overrinding generator func at {func.__module__} with identifier {name}")
+                if registered_generator := generators.get(name):
+                    raise ImportWarning(f"Found overrinding generator func at {func.__module__}.{name}"
+                                        f"\nAlready registered generator identifier at {registered_generator.__module__}.{registered_generator.__name__}")
                 _check_func_signature(func)
                 generators[name] = func
     
     return generators
 
+# yep no clue of what i'm doing anymore
 def _check_func_signature(func: Callable) -> None:
-    signature = inspect.signature(func)
-    parameters_kinds = [parameter.kind for parameter in signature.parameters.values()]
-    if inspect.Parameter.VAR_KEYWORD in parameters_kinds:
-        raise ImportWarning(f"the generator at {func.__module__} identified by {func.__name__} contains a VAR_KEYWORD (**kwargs)")
+    func_signature = inspect.signature(func)
+    func_module = func.__module__
+    func_name = func.__name__
+    _check_func_parameters_kinds(func_signature, func_module, func_name)
+    _check_func_parameters_types(func_signature, func_module, func_name)
+    _check_func_return_type(func_signature, func_module, func_name)
+
+
+def _check_func_parameters_kinds(signature: inspect.Signature, func_module: str, func_name: str) -> None:
+    parameters_kinds: list[inspect._ParameterKind] = []
+    for parameter in signature.parameters.values():
+        if parameter.kind is inspect.Parameter.VAR_KEYWORD:
+            raise ImportWarning(f"The parameter {parameter.name} in {func_module}.{func_name}, "
+                                "is of type VAR_KEYWORD (begins with **)."
+                                "\nThis is forbidden by the conventions")
+            
+        parameters_kinds.append(parameter.kind)
+        
     if (inspect.Parameter.POSITIONAL_OR_KEYWORD in parameters_kinds 
         and
         inspect.Parameter.VAR_POSITIONAL in parameters_kinds):
-        ERR_MSG = f"""
-    "the generator at {func.__module__} identified by {func.__name__} contains a var positional (*args) and a POSITIONAL_OR_KEYWORD at the same time.
-    This weaken the SemanticValidator"
-        """
-        raise ImportWarning(ERR_MSG)
+        raise ImportWarning(
+            "The generator at {func_module} identified by {func_name}, "
+            "contains a VAR_POSITIONAL (begin with *) and POSITIONAL_OR_KEYWORD arguments at the same time."
+            f"\nSignature: def {func_name}{signature}"
+        )
 
+def _check_func_parameters_types(signature: inspect.Signature, func_module: str, func_name: str) -> None:
+    for parameter in signature.parameters.values():
+        try:
+            _check_parameter_type(parameter, ALLOWED_INPUT_TYPES, ALLOWED_INPUT_ORIGINS)
+        except ImportError as reason:
+            raise ImportWarning(
+                "PARAMETERS TYPE CHECK FAILED:\n",
+                f"The parameter {parameter.name!r} in {func_module}.{func_name}, ",
+                f"{reason}"
+            )
 
+def _check_func_return_type(signature: inspect.Signature, func_module: str, func_name: str) -> None:
+    try:
+        _check_annotation(signature.return_annotation, ALLOWED_RETURN_TYPES, ALLOWED_INPUT_ORIGINS)
+    except ImportError as reason:
+        raise ImportWarning(
+            "RETURN TYPE CHECK FAILED:\n",
+            f"The function located at {func_module}.{func_name}, ",
+            f"{reason}"
+        )
+
+def _check_parameter_type(parameter: inspect.Parameter, allowed: list, origins: list) -> None:
+    if parameter.kind == inspect.Parameter.VAR_POSITIONAL:
+        return
+    _check_annotation(parameter.annotation, allowed, origins)
+    
+def _check_annotation(annotation: Any, allowed: list, origins: list) -> None:
+    origin = get_origin(annotation)
+    if annotation not in allowed and origin not in origins:
+        raise ImportError(
+            f"uses an unsupported type: {annotation}"
+            f"\nALLOWED = {allowed + origins}"
+        )
+    
 GENERATORS_REGISTRY = _build_generators_registery()

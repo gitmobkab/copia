@@ -21,6 +21,10 @@ dependencies = [
     "typer>=0.24.1",
 ]
 
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1"]
+
 [project.scripts]
 copia = "copia.cli.app:app"
 
