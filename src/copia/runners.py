@@ -1,18 +1,18 @@
 from typing import Any, Generator, TypeAlias
 from random import choice
+
 from copia.parser.models import Column, GeneratorCall
 from copia.generators import GENERATORS_REGISTRY, GeneratorValueError
-
-from sqlalchemy import Connection, text
+from copia.adapters import BaseAdapter
 
 REF_COLLECTION : TypeAlias = dict[str, dict[str, list]]
 
 
-def generate_rows(connection: Connection, columns: list[Column], rows: int) -> Generator[dict[str, Any], Any, None]:
+def generate_rows(adapter: BaseAdapter, columns: list[Column], rows: int) -> Generator[dict[str, Any], Any, None]:
     if rows <= 0:
         raise ValueError("Expected an integer above 0 for the number of rows,"
                          f"got {rows}")
-    refs = build_refs(connection, columns)
+    refs = build_refs(adapter, columns)
     for _ in range(rows):
         yield generate_row(columns, refs)
 
@@ -40,9 +40,9 @@ def run_ref(ref_call: GeneratorCall, refs: REF_COLLECTION) -> Any:
         return choice(ref_choices)
     raise GeneratorValueError(f"No values found in db at {table!r}.{column!r}", "ref")
     
-def build_refs(connection: Connection, columns: list[Column]) -> REF_COLLECTION:
+def build_refs(adapter: BaseAdapter, columns: list[Column]) -> REF_COLLECTION:
     refs = _initialize_refs(columns)
-    return _populate_refs(connection, refs)
+    return _populate_refs(adapter, refs)
 
 def _initialize_refs(columns: list[Column]) -> REF_COLLECTION:
     refs: REF_COLLECTION = {}
@@ -55,14 +55,14 @@ def _initialize_refs(columns: list[Column]) -> REF_COLLECTION:
         refs[table_name][column_name] = []
     return refs
         
-def _populate_refs(connection: Connection, refs: REF_COLLECTION) -> REF_COLLECTION:
+def _populate_refs(adapter: BaseAdapter, refs: REF_COLLECTION) -> REF_COLLECTION:
     for table, columns in refs.items():
-        columns_str = ", ".join(columns.keys())
-        query = f"SELECT {columns_str} FROM {table}"
+        
         try:
-            rows = connection.execute(text(query)).fetchall()
+            rows = adapter.fetch(table, list(columns.keys()))
         except Exception as err:
             raise GeneratorValueError(str(err), "ref")
+        
         for row in rows:
             for col, val in zip(columns.keys(), row):
                 refs[table][col].append(val)
