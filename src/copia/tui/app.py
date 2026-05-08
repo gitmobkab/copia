@@ -1,6 +1,5 @@
 from threading import Event
 
-from sqlalchemy import Engine, Connection, inspect
 from textual import on, work
 from textual.app import App, ComposeResult
 from textual.widgets import Tree, Footer
@@ -17,7 +16,7 @@ from copia.generators import (
     update_global_faker
 )
 from copia.runners import generate_rows
-from copia.submit import submit_rows
+from copia.adapters import BaseAdapter
 
 from .widgets import CopiaEditor, ActionBar, ResultsViewer
 from .screens import HelpScreen, GenerationSettingsScreen
@@ -59,11 +58,9 @@ class CopiaApp(App):
             super().__init__()
             self.error = error
     
-    def __init__(self, engine: Engine):
-        self.engine = engine
+    def __init__(self, adapter: BaseAdapter):
+        self._adapter = adapter
         self._validator = SemanticValidator(GENERATORS_REGISTRY)
-        self._inspector = inspect(engine)
-        self._connection : Connection = engine.connect()
         self._cancel_requested = Event()
         self._generation_settings = GenerationSettings()
         super().__init__()
@@ -75,10 +72,10 @@ class CopiaApp(App):
     
     def compose(self) -> ComposeResult:
         with HorizontalGroup():
-            table = build_database_tables_tree(self.engine, "db-tree")
+            table = build_database_tables_tree(self._adapter, "db-tree")
             yield table
             with VerticalGroup():
-                yield CopiaEditor()
+                yield CopiaEditor(tab_behavior="indent")
                 yield ActionBar()
                 yield ResultsViewer()
         yield Footer()
@@ -86,7 +83,8 @@ class CopiaApp(App):
     @on(Tree.NodeSelected, "#db-tree")
     def update_selected_table(self, event: Tree.NodeSelected) -> None:
         action_bar = self.query_one(ActionBar)
-        action_bar.selected_table = event.node.data
+        if data := event.node.data:
+            action_bar.selected_table = data
     
     def action_generation_settings(self) -> None:
         def on_close(settings: GenerationSettings | None) -> None:
@@ -122,10 +120,11 @@ class CopiaApp(App):
         rows = results_viewer.get_rows()
         anonym_columns = list(filter(lambda x: x is None, columns))
         if anonym_columns:
-            results_viewer.error(f"you have {len(anonym_columns)} anonym columns defined, copia can't map submit until all columns get a name")
+            results_viewer.error(f"you have {len(anonym_columns)} anonym columns defined, "
+                                 "copia can't submit to the db until all columns get a name")
             return
         if not rows:
-            results_viewer.error("you need to 'run' the query first then submit the result")
+            results_viewer.error("you need to 'run' the query first then 'submit' the result")
             return
         self.query_one(ActionBar).disable_buttons()
         self.commit_rows(rows, event.table)
@@ -133,7 +132,7 @@ class CopiaApp(App):
     @work(thread=True)
     def commit_rows(self, rows: list[dict], table_name: str):
         try:
-            submit_rows(self.engine, rows, table_name)
+            self._adapter.insert(table_name, rows)
             self.post_message(self.SubmitSucceeded(len(rows)))
         except Exception as err:
             self.post_message(self.SubmitFailed(err))
@@ -143,11 +142,8 @@ class CopiaApp(App):
     def make_rows(self, columns: list[Column], rows: int):
         self._cancel_requested.clear()
         results_viewer = self.query_one(ResultsViewer)
-        if self._connection is None:
-            results_viewer.error("There's no connection, ref can't be used")
-            return
         try:
-            for index, row in enumerate(generate_rows(self._connection, columns, rows), 1):
+            for index, row in enumerate(generate_rows(self._adapter, columns, rows), 1):
                 if self._cancel_requested.is_set():
                     self.post_message(self.GenerationCanceled(index))
                     break
@@ -158,8 +154,7 @@ class CopiaApp(App):
             self.post_message(self.GenerationErrorOccurred(err))
             
     def action_quit(self):
-        if self.engine:
-            self.engine.dispose()
+        self._adapter.close()
         return super().action_quit()
     
     @on(ActionBar.CancelRequested)
