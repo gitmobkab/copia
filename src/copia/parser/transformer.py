@@ -59,6 +59,9 @@ class CopiaTransformer(Transformer):
         else:
             return Params([], item)
         
+    def UNIQUE_CONSTRAINT(self, _):
+        return True
+        
     def generator(self, items) -> GeneratorCall:
         if len(items) == 2:
             return GeneratorCall(
@@ -74,21 +77,31 @@ class CopiaTransformer(Transformer):
         )
         
     def column(self, items) -> Column:
-        if len(items) == 2:
-            column_name = items[0]
-            if column_name in self.defined_columns:
-                raise DuplicateColumnNameError(f"{column_name} is defined twice")
-            else:
-                self.defined_columns.add(column_name)
-            return Column(
-                items[0],
-                items[1]
-            )
-            
-        return Column(
-            None,
-            items[0]
-        )
+        construction_args = self._build_column_construction_args(items)
+        column_name = construction_args[0]
+        if isinstance(column_name, str):
+            self._handle_column_name(column_name)
+        return Column(*construction_args)
+ 
     
     def command(self, items) -> list[Column]:
         return list(items)
+    
+    def _handle_column_name(self, column_name: str) -> None:
+        if column_name in self.defined_columns:
+            raise DuplicateColumnNameError(f"{column_name} is defined twice")
+        else:
+            self.defined_columns.add(column_name)
+        
+    def _build_column_construction_args(self, items: list) -> list:
+        if len(items) == 1:
+            construction_args = [None, False, items[0]]
+        elif len(items) == 2:
+            if isinstance(items[0], str):
+                construction_args = [items[0], False, items[1]]
+            else:
+                construction_args = [None, True, items[1]]
+        else:
+            construction_args = items
+
+        return construction_args
