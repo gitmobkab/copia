@@ -1,53 +1,93 @@
-from typing import Any, Generator, TypeAlias
+from typing import Any, Callable, Generator, TypeAlias
 from random import choice
 
 from copia.parser.models import Column, GeneratorCall
 from copia.generators import GENERATORS_REGISTRY, GeneratorValueError
 from copia.adapters import BaseAdapter
 
-REF_COLLECTION : TypeAlias = dict[str, dict[str, list]]
+DB_DATA_COLLECTION: TypeAlias = dict[str,
+                                 dict[
+                                    str, list
+                                 ]
+                                 ]
 
 
-def generate_rows(adapter: BaseAdapter, columns: list[Column], rows: int) -> Generator[dict[str, Any], Any, None]:
+def generate_rows(
+    adapter: BaseAdapter,
+    columns: list[Column],
+    rows: int,
+    on_column_done: Callable[[str, list[Any]], None] | None = None,
+) -> Generator[dict[str, Any], None, None]:
     if rows <= 0:
-        raise ValueError("Expected an integer above 0 for the number of rows,"
-                         f"got {rows}")
+        raise ValueError(f"Expected an integer above 0 for the number of rows, got {rows}")
     refs = build_refs(adapter, columns)
-    for _ in range(rows):
-        yield generate_row(columns, refs)
+    column_data = _generate_columns(columns, rows, refs, on_column_done)
+    keys = list(column_data.keys())
+    for values in zip(*column_data.values()):
+        yield dict(zip(keys, values))
 
-def generate_row(columns: list[Column], refs : REF_COLLECTION) -> dict[str, Any]:
-    results: dict[str, Any] = {}
+
+def _generate_columns(
+    columns: list[Column],
+    rows: int,
+    refs: DB_DATA_COLLECTION,
+    on_column_done: Callable[[str, list[Any]], None] | None = None,
+) -> dict[str, list[Any]]:
+    result: dict[str, list[Any]] = {}
     for index, column in enumerate(columns, start=1):
-        result = run_column(column, refs)
-        normalized_column_name = column.name or f"Anonym {index}"
-        results[normalized_column_name] = result
-    return results
+        name = column.name or f"Anonym {index}"
+        if column.unique_constraint:
+            values = _generate_unique_values(column, refs, rows)
+        else:
+            values = [run_column(column, refs) for _ in range(rows)]
+        result[name] = values
+        if on_column_done:
+            on_column_done(name, values)
+    return result
 
+def _generate_unique_values(column: Column, refs: DB_DATA_COLLECTION, rows: int, max_attempts: int = 1000):
+    seen = set()
+    values = []
+    for _ in range(rows):
+        for _ in range(max_attempts):
+            value = run_column(column, refs)
+            if value not in seen:
+                seen.add(value)
+                values.append(value)
+                break
+        else:
+            column_name = column.name or "<Anonym column>"
+            raise GeneratorValueError(
+                f"Exhausted unique values for column {column_name!r}",
+                column.generator.name
+            )
+    return values
 
-def run_column(column: Column, refs: REF_COLLECTION) -> Any:
+def run_column(column: Column, refs: DB_DATA_COLLECTION) -> Any:
     generator_name = column.generator.name
-    if generator_name == "ref":
-        return run_ref(column.generator, refs)
+    if generator_name == "fetch":
+        return run_fetch(column.generator, refs)
     generator_func = GENERATORS_REGISTRY[generator_name]
     params = column.generator.params
     return generator_func(*params.positionals, **params.named)
 
-def run_ref(ref_call: GeneratorCall, refs: REF_COLLECTION) -> Any:
+
+def run_fetch(ref_call: GeneratorCall, refs: DB_DATA_COLLECTION) -> Any:
     table, column = _get_ref_data(ref_call)
     ref_choices = refs[table][column]
     if ref_choices:
         return choice(ref_choices)
-    raise GeneratorValueError(f"No values found in db at {table!r}.{column!r}", "ref")
-    
-def build_refs(adapter: BaseAdapter, columns: list[Column]) -> REF_COLLECTION:
+    raise GeneratorValueError(f"No values found in db at {table!r}.{column!r}", "fetch")
+
+
+def build_refs(adapter: BaseAdapter, columns: list[Column]) -> DB_DATA_COLLECTION:
     refs = _initialize_refs(columns)
     return _populate_refs(adapter, refs)
 
-def _initialize_refs(columns: list[Column]) -> REF_COLLECTION:
-    refs: REF_COLLECTION = {}
+def _initialize_refs(columns: list[Column]) -> DB_DATA_COLLECTION:
+    refs: DB_DATA_COLLECTION = {}
     for column in columns:
-        if column.generator.name != "ref":
+        if column.generator.name != "fetch":
             continue
         table_name, column_name = _get_ref_data(column.generator)
         if table_name not in refs:
@@ -55,14 +95,12 @@ def _initialize_refs(columns: list[Column]) -> REF_COLLECTION:
         refs[table_name][column_name] = []
     return refs
         
-def _populate_refs(adapter: BaseAdapter, refs: REF_COLLECTION) -> REF_COLLECTION:
+def _populate_refs(adapter: BaseAdapter, refs: DB_DATA_COLLECTION) -> DB_DATA_COLLECTION:
     for table, columns in refs.items():
-        
         try:
             rows = adapter.fetch(table, list(columns.keys()))
         except Exception as err:
-            raise GeneratorValueError(str(err), "ref")
-        
+            raise GeneratorValueError(str(err), "fetch")
         for row in rows:
             for col, val in zip(columns.keys(), row):
                 refs[table][col].append(val)
@@ -84,5 +122,5 @@ def _get_ref_data(ref_call: GeneratorCall) -> tuple[str, str]:
 def _parse_ref_input(ref_input: str) -> tuple[str, str]:
     content = ref_input.split(".")
     if len(content) != 2 or not all(content):
-        raise GeneratorValueError("expected reference to match format 'table.column'", "ref")
+        raise GeneratorValueError("expected reference to match format 'table.column'", "fetch")
     return content[0], content[1]
