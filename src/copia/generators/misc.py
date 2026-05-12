@@ -29,7 +29,7 @@ def enum(*args) -> TYPES:
         raise GeneratorValueError("Can't pick without any options")
     return choice(args) # assume parser and validator never allow anything other than TYPES in
 
-def ref(column: str) -> Any:
+def fetch(column: str) -> Any:
     """Fetch a random existing value from a database column.
         
     Locale dependent:
@@ -43,5 +43,5 @@ def ref(column: str) -> Any:
         An empty column will raise an error at runtime.
     """
     # filler for validator, help, suggestion, etc
-    # the real ref logic is the runners/ module
+    # the real logic is the runners module
     raise NotImplementedError("you shouldn't call this generator directly")
