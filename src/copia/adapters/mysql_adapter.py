@@ -79,7 +79,7 @@ class MySQLAdapter(BaseAdapter):
         
     def coerce_row(self, row: dict[str, Any]) -> dict[str, Any]:
         coerced_row: dict[str, Any] = {}
-        for key, value in row:
+        for key, value in row.items():
             coerced_row[key] = self.coerce(value)
         return coerced_row
         
