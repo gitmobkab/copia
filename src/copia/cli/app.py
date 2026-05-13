@@ -83,11 +83,8 @@ def main(
         print_error(connection_err)
         raise typer.Exit(ExitCodes.CONNEXION_TO_DB_FAILED)
 
-    try:
-        CopiaApp(adapter).run()
-        success("Bye.")
-    except Exception as err:
-        print_error(err, "Something unexpected occurred while running the tui...")
+    CopiaApp(adapter).run()
+    success("Bye.")
         
             
 def get_any_profile(profile_name: str):
