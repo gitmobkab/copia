@@ -42,10 +42,9 @@ def test_fetch_specific_columns(mysql_adapter: MySQLAdapter):
     assert all(len(row) == 1 for row in result)
 
 
-def test_insert_empty_rows(mysql_adapter: MySQLAdapter):
-    mysql_adapter.insert("users", [])
-    result = mysql_adapter.fetch("users", ["id"])
-    assert len(result) == 0
+def test_insert_empty_rows_raises(mysql_adapter: MySQLAdapter):
+    with pytest.raises(ValueError):
+        mysql_adapter.insert("users", [])
 
 
 def test_insert_batch(mysql_adapter: MySQLAdapter):

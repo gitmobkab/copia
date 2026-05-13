@@ -38,11 +38,9 @@ def test_fetch_specific_columns(pg_adapter: PostgresAdapter):
     assert all(len(row) == 1 for row in result)
 
 
-def test_insert_empty_rows(pg_adapter: PostgresAdapter):
-    pg_adapter.insert("users", [])
-    result = pg_adapter.fetch("users", ["id"])
-    assert len(result) == 0
-
+def test_insert_empty_rows_raises(pg_adapter: PostgresAdapter):
+    with pytest.raises(ValueError):
+        pg_adapter.insert("users", [])
 
 def test_insert_batch(pg_adapter: PostgresAdapter):
     rows = [{"id": i, "email": f"user{i}@test.com", "username": f"user{i}"} for i in range(1, 502)]
