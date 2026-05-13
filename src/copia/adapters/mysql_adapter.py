@@ -39,7 +39,7 @@ class MySQLAdapter(BaseAdapter):
             return tables
         
     def get_columns(self, table: str) -> list[ColumnInfo]:
-        self.check_table(table)
+        super().get_columns(table)
         columns : list[ColumnInfo] = []
         with self._connection.cursor() as cursor:
             cursor.execute(f"SHOW COLUMNS FROM {table}")
@@ -55,17 +55,15 @@ class MySQLAdapter(BaseAdapter):
             return columns
 
     def fetch(self, table: str, columns: Sequence[str]) -> list[tuple[Any, ...]]:
-        self.check_columns_in_table(table, columns)        
+        super().fetch(table, columns)
         columns_query = ", ".join(columns)
         with self._connection.cursor(Cursor) as cursor:
             cursor.execute(f"SELECT {columns_query} FROM {table}")
             return list(cursor.fetchall())
 
     def insert(self, table: str, rows: Sequence[dict[str, Any]], batch_size: int = 200) -> None:
-        if not rows:
-            return
+        super().insert(table, rows)
         columns = list(rows[0].keys())
-        self.check_columns_in_table(table, columns)
         columns_query = ", ".join(columns)
         placeholders = ", ".join(f"%({c})s" for c in columns)
         query = f"INSERT INTO {table} ({columns_query}) VALUES ({placeholders})"
@@ -73,18 +71,18 @@ class MySQLAdapter(BaseAdapter):
         iterator = iter(rows)
         with self._connection.cursor() as cursor:
             while batch := list(islice(iterator, batch_size)):
-                coerced_batch = list(map(self.coerce_row, batch))
+                coerced_batch = list(map(self._coerce_row, batch))
                 cursor.executemany(query, coerced_batch)
         self._connection.commit()
         
-    def coerce_row(self, row: dict[str, Any]) -> dict[str, Any]:
+    def _coerce_row(self, row: dict[str, Any]) -> dict[str, Any]:
         coerced_row: dict[str, Any] = {}
         for key, value in row.items():
-            coerced_row[key] = self.coerce(value)
+            coerced_row[key] = self._coerce(value)
         return coerced_row
         
     
-    def coerce(self, value: Any) -> Any:
+    def _coerce(self, value: Any) -> Any:
         type_of_value = type(value)
         if coercer := self.COERCERS.get(type_of_value):
             return coercer(value)
@@ -92,14 +90,3 @@ class MySQLAdapter(BaseAdapter):
         
     def close(self) -> None:
         self._connection.close()
-        
-    def check_table(self, table: str) -> None:
-        if table not in self.get_tables():
-            raise ValueError(f'The table {table!r} does not exist in the current db')
-        
-    def check_columns_in_table(self, table: str, columns: Sequence[str]) -> None:
-        self.check_table(table)
-        real_columns_names = [column.name for column in self.get_columns(table)]
-        for column in columns:
-            if column not in real_columns_names:
-                raise ValueError(f'The column {column!r} in table {table!r} does not exist')

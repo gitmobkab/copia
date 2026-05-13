@@ -27,6 +27,7 @@ class PostgresAdapter(BaseAdapter):
             return [row[0] for row in cursor.fetchall()]
 
     def get_columns(self, table: str) -> list[ColumnInfo]:
+        super().get_columns(table)
         columns: list[ColumnInfo] = []
         with self._connection.cursor() as cursor:
             cursor.execute(
@@ -47,6 +48,7 @@ class PostgresAdapter(BaseAdapter):
             return columns
 
     def fetch(self, table: str, columns: Sequence[str]) -> list[tuple[Any, ...]]:
+        super().fetch(table, columns)
         query = SQL("SELECT {0} FROM {1}")
         columns_query = self.escape_columns(columns)
         composed_query = query.format(
@@ -58,8 +60,7 @@ class PostgresAdapter(BaseAdapter):
             return cursor.fetchall()
 
     def insert(self, table: str, rows: Sequence[dict[str, Any]], batch_size: int = 200) -> None:
-        if not rows:
-            return
+        super().insert(table, rows)
         columns = list(rows[0].keys())
         query = SQL("INSERT INTO {0} ({1}) VALUES ({2})")
         columns = list(rows[0].keys())
