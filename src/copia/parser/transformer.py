@@ -59,6 +59,9 @@ class CopiaTransformer(Transformer):
         else:
             return Params([], item)
         
+    def UNIQUE_CONSTRAINT(self, value) -> bool:
+        return True
+        
     def generator(self, items) -> GeneratorCall:
         if len(items) == 2:
             return GeneratorCall(
@@ -74,21 +77,45 @@ class CopiaTransformer(Transformer):
         )
         
     def column(self, items) -> Column:
-        if len(items) == 2:
-            column_name = items[0]
-            if column_name in self.defined_columns:
-                raise DuplicateColumnNameError(f"{column_name} is defined twice")
-            else:
-                self.defined_columns.add(column_name)
-            return Column(
-                items[0],
-                items[1]
-            )
+        construction_values = self._get_construction_values(items)
+        column_name = items[0]
+        if isinstance(column_name, str):
+            self._duplicate_columns_check(column_name)
+        return Column(*construction_values)
             
-        return Column(
-            None,
-            items[0]
-        )
-    
+    def _get_construction_values(self, items) -> list:
+        items_len = len(items)
+        construction_values = []
+        if items_len == 1:
+            construction_values = [
+                None,
+                False,
+                items[0]
+            ]
+        elif items_len == 2 and items[0] is True:
+            construction_values = [
+                None,
+                True,
+                items[1]
+            ]
+        elif items_len == 2 and (isinstance(items[0], str) or items[0] is None):
+                construction_values = [
+                    items[0],
+                    False,
+                    items[1]
+                ]
+        else:
+            construction_values = [
+                *items
+            ]
+        
+        return construction_values
+        
+    def _duplicate_columns_check(self, column_name: str):
+        if column_name in self.defined_columns:
+            raise DuplicateColumnNameError(f"{column_name} is defined twice")
+        else:
+            self.defined_columns.add(column_name)
+
     def command(self, items) -> list[Column]:
         return list(items)
