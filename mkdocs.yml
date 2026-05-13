@@ -54,7 +54,7 @@ nav:
     - dev/docstrings.md
     - dev/generators_registry.md
     - dev/validator.md
-    - dev/ref.md
+    - dev/fetch.md
     
 
 markdown_extensions:
