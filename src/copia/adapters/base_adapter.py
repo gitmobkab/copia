@@ -22,7 +22,7 @@ class BaseAdapter(ABC):
     @abstractmethod
     def insert(self, table: str, rows: Sequence[dict[str, Any]], batch_size: int = 200) -> None:
         if not rows:
-            return
+            raise ValueError("rows cannot be empty")
         columns = list(rows[0].keys())
         self.check_columns_in_table(table, columns)
     
