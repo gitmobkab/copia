@@ -76,7 +76,8 @@ plugins:
   - meta
   - social:
       cards_layout_options:
-        background_color: "#0f1210"
+        background_color: "transparent"
+        background_image: layouts/social_card_bg.png
         color: "#e2ece2"
         font_family: JetBrains Mono
   - blog:

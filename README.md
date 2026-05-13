@@ -79,7 +79,7 @@ created_at:  past_date()
 
 - **Simple language** — if you know what a function call looks like, you know the Copia DSL
 - **Realistic data** — built on [Faker](https://faker.readthedocs.io/), 25+ generators out of the box
-- **Relational-aware** — [`ref('table.column')`](https://gitmobkab.github.io/copia/generators/ref) samples from existing rows, so foreign keys just work
+- **Relational-aware** — [`fetch('table.column')`](https://gitmobkab.github.io/copia/generators/fetch) samples from existing rows, so foreign keys just work
 - **Interactive TUI** — write, preview, and insert without leaving your terminal
 
 ## Installation

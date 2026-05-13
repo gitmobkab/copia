@@ -52,7 +52,7 @@ Run it for as many rows as you need. Thanks to Faker every value is realistic, f
 - **Framework-agnostic.** Works on any relational database, any stack.
 - **Simple language.** If you know what a function call looks like, you know the Copia DSL.
 - **Realistic data.** Built on [Faker](https://faker.readthedocs.io/) — names, emails, addresses, IPs, dates, and more out of the box.
-- **Relational-aware.** The [`ref()`](generators/ref.md) generator lets you sample from existing rows, so foreign keys just work.
+- **Relational-aware.** The [`fetch()`](generators/fetch.md) generator lets you sample from existing rows, so foreign keys just work.
 - **Interactive.** A full TUI lets you write, preview, and insert without leaving your terminal.
 
 ---
