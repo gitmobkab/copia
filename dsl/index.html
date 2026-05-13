@@ -708,6 +708,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-unique-constraint" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        the unique constraint
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#arguments" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -780,10 +791,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-ref-generator" class="md-nav__link">
+  <a href="#the-fetch-generator" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The ref generator
+        The fetch generator
       
     </span>
   </a>
@@ -1130,6 +1141,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../generators/fetch/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    fetch
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../generators/firstname/" class="md-nav__link">
         
   
@@ -1446,34 +1485,6 @@
     
   
     ranged_int
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../generators/ref/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    ref
   
 
     
@@ -2247,27 +2258,37 @@ testing without a target table in mind.</p>
 <hr />
 <h2 id="generator-call">Generator call</h2>
 <p>A generator is called by name, with optional arguments in parentheses.
-If a generator takes no arguments, the parentheses can be omitted entirely.</p>
+the parantheses are mandatory to call a generator</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>email: email()
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>email: email
 </code></pre></div>
-<p>Both forms are equivalent for generators with no required arguments.</p>
+<h2 id="the-unique-constraint">the unique constraint</h2>
+<p>you can tell to copia that the generators should only output unique values with the <code>unique</code> keyword before the name of the generator</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>name: name()
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>email: unique email() # only email will receive unique values
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>age: int(0, 50)
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Disclaimer about uniqueness</p>
+<p>ensuring randomness and uniqueness is a tedious problem that can't be optimally solved
+as explained in the <strong>birthday problem</strong>.
+also since uniqueness prevents repetitions, a generator might exhaust it's values before reaching the number of lines</p>
+</div>
 <hr />
 <h2 id="arguments">Arguments</h2>
 <p>Generators accept two kinds of arguments: <strong>positional</strong> and <strong>named</strong>.</p>
 <h3 id="positional">Positional</h3>
 <p>Passed in order, without names.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>status: enum(&#39;active&#39;, &#39;inactive&#39;, &#39;banned&#39;)
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>score: int_range(0, 100)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>status: enum(&#39;active&#39;, &#39;inactive&#39;, &#39;banned&#39;)
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>score: ranged_int(0, 100)
 </code></pre></div>
 <h3 id="named">Named</h3>
 <p>Passed by name, in any order.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>email: email(safe=True, domain=&#39;example.com&#39;)
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>password: password(length=16, special_chars=False)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>email: email(safe=True, domain=&#39;example.com&#39;)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>password: password(length=16, special_chars=False)
 </code></pre></div>
 <h3 id="mixed">Mixed</h3>
 <p>Positional arguments must always come before named arguments.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>ip: ipv4(True, address_class=&#39;b&#39;)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>ip: ipv4(True, address_class=&#39;b&#39;)
 </code></pre></div>
 <h3 id="argument-types">Argument types</h3>
 <table>
@@ -2300,30 +2321,30 @@ If a generator takes no arguments, the parentheses can be omitted entirely.</p>
 <h2 id="multiple-columns">Multiple columns</h2>
 <p>A Copia file defines one or more columns, one per line.
 All columns are generated together for the target table.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>id:         uuid()
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>username:   username()
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>email:      email(safe=True)
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>password:   password(length=20)
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>created_at: past_date()
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>id:         uuid()
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>username:   username()
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>email:      email(safe=True)
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>password:   password(length=20)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>created_at: past_date()
 </code></pre></div>
 <hr />
-<h2 id="the-ref-generator">The <code>ref</code> generator</h2>
-<p><code>ref</code> samples a random value from an existing column in the database.
+<h2 id="the-fetch-generator">The <code>fetch</code> generator</h2>
+<p><code>fetch</code> samples a random value from an existing column in the database.
 It is the only generator that reads from the database rather than generating data.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>user_id: ref(&#39;users.id&#39;)
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>post_id: ref(&#39;posts.id&#39;)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>user_id: ref(&#39;users.id&#39;)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>post_id: ref(&#39;posts.id&#39;)
 </code></pre></div>
 <p>The argument is a string in <code>'table.column'</code> format.</p>
 <blockquote>
-<p>⚠️ <code>ref</code> only reads values already present in the database.
+<p>⚠️ <code>fetch</code> only reads values already present in the database.
 An empty column will raise an error at runtime.
 Always populate parent tables before referencing them.</p>
 </blockquote>
 <hr />
 <h2 id="the-enum-generator">The <code>enum</code> generator</h2>
 <p><code>enum</code> picks a random value from a fixed set of choices you define.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>role:   enum(&#39;admin&#39;, &#39;editor&#39;, &#39;viewer&#39;)
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>status: enum(&#39;active&#39;, &#39;inactive&#39;)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>role:   enum(&#39;admin&#39;, &#39;editor&#39;, &#39;viewer&#39;)
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>status: enum(&#39;active&#39;, &#39;inactive&#39;)
 </code></pre></div>
 <p>At least one value is required.</p>
 
