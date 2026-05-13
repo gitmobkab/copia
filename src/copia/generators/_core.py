@@ -1,9 +1,7 @@
-from faker import Faker
-from faker.config import AVAILABLE_LOCALES
 from dataclasses import dataclass
 
-_fake = Faker()
-"""global faker instance for all generators based on faker"""
+from faker import Faker
+from faker.config import AVAILABLE_LOCALES
 
 @dataclass
 class GenerationSettings:
@@ -13,6 +11,9 @@ class GenerationSettings:
     """if true, this will disable weighting of the values.
     Effectively increasing performance but losing real-world frequencies.
     """
+
+_fake = Faker()
+"""global faker instance for all generators based on faker"""
 
 def update_global_faker(generation_settings: GenerationSettings) -> None:
     """replace the global faker object with a new one

@@ -1,9 +1,11 @@
 start: command
 command: column+
 
-column: IDENTIFIER? ":" generator
+column: IDENTIFIER? ":" UNIQUE_CONSTRAINT? generator
 
-generator: IDENTIFIER ("(" params? ")")?
+UNIQUE_CONSTRAINT: "unique"i
+
+generator: IDENTIFIER "(" params? ")"
 
 params: positionals ("," named)? | named
 
@@ -21,7 +23,7 @@ string: SINGLE_QUOTED_STRING | DOUBLE_QUOTED_STRING
 SINGLE_QUOTED_STRING: /'[^']*'/
 DOUBLE_QUOTED_STRING: /"[^"]*"/
 
-BOOL.2: /[Tt]rue/ | /[Ff]alse/
+BOOL.2: "true"i | "false"i
 FLOAT.2: /\-?[0-9]+\.[0-9]+/
 INT: /\-?[0-9]+/
 %ignore /\s/

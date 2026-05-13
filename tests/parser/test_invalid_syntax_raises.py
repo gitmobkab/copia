@@ -13,7 +13,8 @@ class TestInvalidSyntax:
             "user=name:float()"
         ]
         with pytest.raises(UnexpectedInput):
-            parse("1badIdentifier:int()")
+            for test in tests:
+                parse(test)
             
     
     def test_unquoted_string_raises(self):

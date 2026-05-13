@@ -33,14 +33,28 @@ Named columns must match the actual column names in your target table.
 ## Generator call
 
 A generator is called by name, with optional arguments in parentheses.
-If a generator takes no arguments, the parentheses can be omitted entirely.
+the parantheses are mandatory to call a generator
 
 ```
 email: email()
-email: email
 ```
 
-Both forms are equivalent for generators with no required arguments.
+## the unique constraint
+
+you can tell to copia that the generators should only output unique values with the `unique` keyword before the name of the generator
+
+```
+name: name()
+email: unique email() # only email will receive unique values
+age: int(0, 50)
+```
+
+!!! warning "Disclaimer about uniqueness"
+    ensuring randomness and uniqueness is a tedious problem that can't be optimally solved
+    as explained in the **birthday problem**.
+    also since uniqueness prevents repetitions, a generator might exhaust it's values before reaching the number of lines
+    
+
 
 ---
 
@@ -54,7 +68,7 @@ Passed in order, without names.
 
 ```
 status: enum('active', 'inactive', 'banned')
-score: int_range(0, 100)
+score: ranged_int(0, 100)
 ```
 
 ### Named
@@ -100,9 +114,9 @@ created_at: past_date()
 
 ---
 
-## The `ref` generator
+## The `fetch` generator
 
-`ref` samples a random value from an existing column in the database.
+`fetch` samples a random value from an existing column in the database.
 It is the only generator that reads from the database rather than generating data.
 
 ```
@@ -112,7 +126,7 @@ post_id: ref('posts.id')
 
 The argument is a string in `'table.column'` format.
 
-> ⚠️ `ref` only reads values already present in the database.
+> ⚠️ `fetch` only reads values already present in the database.
 > An empty column will raise an error at runtime.
 > Always populate parent tables before referencing them.
 
