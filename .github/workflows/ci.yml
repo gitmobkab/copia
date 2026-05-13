@@ -7,8 +7,65 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-test:
+  lint:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.13
+
+      - name: Install dependencies
+        run: uv sync --all-groups
+
+      - name: Lint with ruff
+        run: uv run ruff check src/
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: copia_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: root
+          POSTGRES_DB: copia_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    env:
+      COPIA_TEST_MYSQL_HOST: 127.0.0.1
+      COPIA_TEST_MYSQL_PORT: 3306
+      COPIA_TEST_MYSQL_USER: root
+      COPIA_TEST_MYSQL_PASSWORD: root
+      COPIA_TEST_MYSQL_DB: copia_test
+      COPIA_TEST_PG_HOST: 127.0.0.1
+      COPIA_TEST_PG_PORT: 5432
+      COPIA_TEST_PG_USER: postgres
+      COPIA_TEST_PG_PASSWORD: root
+      COPIA_TEST_PG_DB: copia_test
 
     steps:
       - uses: actions/checkout@v4
@@ -25,8 +82,13 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-groups
 
-      - name: Lint with ruff
-        run: uv run ruff check src/
+      - name: Set up MySQL schema
+        run: |
+          mysql -h 127.0.0.1 -u root -proot copia_test < tests/adapters/schema.sql
+
+      - name: Set up PostgreSQL schema
+        run: |
+          PGPASSWORD=root psql -h 127.0.0.1 -U postgres -d copia_test -f tests/adapters/schema.sql
 
       - name: Run tests
         run: uv run pytest tests/ --cov=src/copia --cov-report=term-missing
