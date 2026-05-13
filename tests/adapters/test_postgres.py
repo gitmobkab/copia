@@ -50,11 +50,11 @@ def test_insert_batch(pg_adapter: PostgresAdapter):
     result = pg_adapter.fetch("users", ["id"])
     assert len(result) == 501
     
-def test_fetch_unknown_column(postgres_adapter: PostgresAdapter):
+def test_fetch_unknown_column(pg_adapter: PostgresAdapter):
     with pytest.raises(ValueError, match="does not exist"):
-        postgres_adapter.fetch("users", ["nonexistent"])
+        pg_adapter.fetch("users", ["nonexistent"])
 
 
-def test_fetch_unknown_table(postgres_adapter: PostgresAdapter):
+def test_fetch_unknown_table(pg_adapter: PostgresAdapter):
     with pytest.raises(ValueError, match="does not exist"):
-        postgres_adapter.fetch("nonexistent", ["id"])
+        pg_adapter.fetch("nonexistent", ["id"])
