@@ -120,8 +120,8 @@ created_at: past_date()
 It is the only generator that reads from the database rather than generating data.
 
 ```
-user_id: ref('users.id')
-post_id: ref('posts.id')
+user_id: fetch('users.id')
+post_id: fetch('posts.id')
 ```
 
 The argument is a string in `'table.column'` format.
