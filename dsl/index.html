@@ -2331,8 +2331,8 @@ All columns are generated together for the target table.</p>
 <h2 id="the-fetch-generator">The <code>fetch</code> generator</h2>
 <p><code>fetch</code> samples a random value from an existing column in the database.
 It is the only generator that reads from the database rather than generating data.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>user_id: ref(&#39;users.id&#39;)
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>post_id: ref(&#39;posts.id&#39;)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>user_id: fetch(&#39;users.id&#39;)
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>post_id: fetch(&#39;posts.id&#39;)
 </code></pre></div>
 <p>The argument is a string in <code>'table.column'</code> format.</p>
 <blockquote>
