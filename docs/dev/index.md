@@ -10,4 +10,4 @@ This section documents the internals of Copia for contributors and developers wh
 - [Docstring format](docstrings.md) — the docstring convention Copia uses to generate documentation
 - [The dynamic generators system](generators_registry.md) — how generators are registered and what constraints apply
 - [The semantic validator](validator.md) — how Copia validates DSL calls against generator signatures
-- [How `ref` works](ref.md) — the internals of the `ref()` generator
+- [How `fetch` works](fetch.md) — the internals of the `fetch()` generator

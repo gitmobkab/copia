@@ -28,10 +28,12 @@ Copia requires **Python 3.13 or higher**.
 
 === "From source"
 
+    we recommend [uv](https://docs.astral.sh/uv/getting-started/installation/#standalone-installer) to download the repo from source
+
     ```bash
     git clone https://github.com/gitmobkab/copia
     cd copia
-    pip install -e .
+    uv sync --all-groups
     ```
 
 ---

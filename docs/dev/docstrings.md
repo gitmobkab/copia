@@ -47,7 +47,7 @@ Locale dependent:
 
 If omitted, the generator is assumed to be locale-independent.
 
-!!! note title="Not entirely strict"
+!!! note "Not entirely strict"
     To be honest, if the line below Locale dependent is not exactly `yes` it's treated as `no`. But it's best to follow the format strictly to avoid confusion.
 
 ### `Args`

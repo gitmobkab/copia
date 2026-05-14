@@ -26,6 +26,7 @@ theme:
     - content.code.annotate
     - navigation.tabs
     - navigation.tabs.sticky
+    - content.tooltips
 
 hooks:
   - hooks/dsl_hook.py
