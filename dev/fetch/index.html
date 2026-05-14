@@ -12,7 +12,7 @@
         <meta name="author" content="gitmobkab">
       
       
-        <link rel="canonical" href="https://gitmobkab.github.io/copia/dev/ref/">
+        <link rel="canonical" href="https://gitmobkab.github.io/copia/dev/fetch/">
       
       
         <link rel="prev" href="../validator/">
@@ -27,7 +27,7 @@
     
     
       
-        <title>How ref Works - Copia</title>
+        <title>How fetch Works - Copia</title>
       
     
     
@@ -63,17 +63,17 @@
     
   
 <meta property="og:type" content="website" />
-<meta property="og:title" content="How ref Works - Copia" />
+<meta property="og:title" content="How fetch Works - Copia" />
 <meta property="og:description" content="Interactive TUI database seeder" />
-<meta property="og:image" content="https://gitmobkab.github.io/copia/assets/images/social/dev/ref.png" />
+<meta property="og:image" content="https://gitmobkab.github.io/copia/assets/images/social/dev/fetch.png" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:url" content="https://gitmobkab.github.io/copia/dev/ref/" />
+<meta property="og:url" content="https://gitmobkab.github.io/copia/dev/fetch/" />
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="How ref Works - Copia" />
+<meta property="twitter:title" content="How fetch Works - Copia" />
 <meta property="twitter:description" content="Interactive TUI database seeder" />
-<meta property="twitter:image" content="https://gitmobkab.github.io/copia/assets/images/social/dev/ref.png" />
+<meta property="twitter:image" content="https://gitmobkab.github.io/copia/assets/images/social/dev/fetch.png" />
 </head>
   
   
@@ -91,7 +91,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-ref-works" class="md-skip">
+        <a href="#how-fetch-works" class="md-skip">
           Skip to content
         </a>
       
@@ -126,7 +126,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              How ref Works
+              How fetch Works
             
           </span>
         </div>
@@ -2024,7 +2024,7 @@
   <span class="md-ellipsis">
     
   
-    How ref Works
+    How fetch Works
   
 
     
@@ -2042,7 +2042,7 @@
   <span class="md-ellipsis">
     
   
-    How ref Works
+    How fetch Works
   
 
     
@@ -2197,21 +2197,21 @@
   
 
 
-<h1 id="how-ref-works">How <code>ref</code> Works</h1>
-<p><code>ref</code> is the only generator that reads from the database rather than generating data. It samples a random value from an existing column.</p>
+<h1 id="how-fetch-works">How <code>fetch</code> Works</h1>
+<p><code>fetch</code> is the only generator that reads from the database rather than generating data. It samples a random value from an existing column.</p>
 <hr />
 <h2 id="usage">Usage</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>user_id: ref(&#39;users.id&#39;)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>user_id: fetch(&#39;users.id&#39;)
 </code></pre></div>
-<p>The argument is a string in <code>table.column</code> format. <code>ref</code> fetches all existing values from that column and returns one at random on each call.</p>
+<p>The argument is a string in <code>table.column</code> format. <code>fetch</code> fetches all existing values from that column and returns one at random on each call.</p>
 <hr />
 <h2 id="internals">Internals</h2>
 <h3 id="parsing-the-target">Parsing the target</h3>
-<p>When the DSL is parsed, <code>ref('users.id')</code> produces a <code>GeneratorCall</code> with a single positional argument — the string <code>"users.id"</code>. Before generation, the runner walks all parsed columns, identifies <code>ref</code> calls, and extracts the <code>table.column</code> string via <code>_parse_ref_input()</code>.</p>
+<p>When the DSL is parsed, <code>fetch('users.id')</code> produces a <code>GeneratorCall</code> with a single positional argument — the string <code>"users.id"</code>. Before generation, the runner walks all parsed columns, identifies <code>fetch</code> calls, and extracts the <code>table.column</code> string via <code>_parse_ref_input()</code>.</p>
 <p>The string is split on <code>.</code> and must produce exactly two non-empty parts — <code>table</code> and <code>column</code>. Any other format raises a <code>GeneratorValueError</code> immediately.</p>
 <h3 id="phase-1-initialize">Phase 1 — Initialize</h3>
-<p>Before any generation, the runner scans all parsed columns for <code>ref</code> calls and builds an empty <code>REF_COLLECTION</code> structure:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">REF_COLLECTION</span> <span class="o">=</span> <span class="p">{</span>
+<p>Before any generation, the runner scans all parsed columns for <code>fetch</code> calls and builds an empty <code>DB_DATA_COLLECTION</code> structure:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">DB_DATA_COLLECTION</span> <span class="o">=</span> <span class="p">{</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="s2">&quot;users&quot;</span><span class="p">:</span> <span class="p">{</span>
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">[]</span>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="p">},</span>
@@ -2222,20 +2222,20 @@
 </code></pre></div>
 <p>All tables and columns are identified upfront. Columns belonging to the same table are grouped together — this is what makes the next phase efficient.</p>
 <h3 id="phase-2-populate">Phase 2 — Populate</h3>
-<p>With the structure in hand, the runner fetches all columns of a given table in a single query per table. If two <code>ref</code> calls target <code>users.id</code> and <code>users.email</code>, only one query is issued:</p>
+<p>With the structure in hand, the runner fetches all columns of a given table in a single query per table. If two <code>fetch</code> calls target <code>users.id</code> and <code>users.email</code>, only one query is issued:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span>
 </code></pre></div>
-<p>This is more efficient than one query per <code>ref</code> call. The results are distributed into the corresponding lists in <code>REF_COLLECTION</code>.</p>
+<p>This is more efficient than one query per <code>fetch</code> call. The results are distributed into the corresponding lists in <code>DB_DATA_COLLECTION</code>.</p>
 <h3 id="sampling">Sampling</h3>
-<p>On each row generation, <code>ref('users.id')</code> samples a random value from <code>REF_COLLECTION["users"]["id"]</code> using <code>random.choice()</code>.</p>
+<p>On each row generation, <code>fetch('users.id')</code> samples a random value from <code>DB_DATA_COLLECTION["users"]["id"]</code> using <code>random.choice()</code>.</p>
 <h3 id="empty-column-behavior">Empty column behavior</h3>
-<p>If the target column is empty, <code>REF_COLLECTION["table"]["column"]</code> will be an empty list. Sampling from an empty list raises a <code>GeneratorValueError</code> with a descriptive message pointing to the empty column.</p>
-<p>This is why the <code>ref</code> documentation warns: <strong>always populate parent tables before referencing them.</strong></p>
+<p>If the target column is empty, <code>DB_DATA_COLLECTION["table"]["column"]</code> will be an empty list. Sampling from an empty list raises a <code>GeneratorValueError</code> with a descriptive message pointing to the empty column.</p>
+<p>This is why the <code>fetch</code> documentation warns: <strong>always populate parent tables before referencing them.</strong></p>
 <hr />
 <h2 id="limitations">Limitations</h2>
 <ul>
-<li><code>ref</code> can only reference values already in the database at the time of the run. Values generated in the same run are not available to <code>ref</code>.</li>
-<li><code>ref</code> requires an active database connection.</li>
+<li><code>fetch</code> can only reference values already in the database at the time of the run. Values generated in the same run are not available to <code>fetch</code>.</li>
+<li><code>fetch</code> requires an active database connection.</li>
 </ul>
 
 
