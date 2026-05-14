@@ -2059,10 +2059,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#args-and-named-parameters-are-mutually-exclusive" class="md-nav__link">
+  <a href="#args-and-positional_or_keyword-parameters-are-mutually-exclusive" class="md-nav__link">
     <span class="md-ellipsis">
       
-        *args and named parameters are mutually exclusive
+        *args and POSITIONAL_OR_KEYWORD parameters are mutually exclusive
       
     </span>
   </a>
@@ -2213,9 +2213,9 @@ this function is responsible for dynamically building the registry of generators
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Invalid</span>
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">my_gen</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
 </code></pre></div>
-<h3 id="args-and-named-parameters-are-mutually-exclusive"><code>*args</code> and named parameters are mutually exclusive</h3>
+<h3 id="args-and-positional_or_keyword-parameters-are-mutually-exclusive"><code>*args</code> and POSITIONAL_OR_KEYWORD parameters are mutually exclusive</h3>
 <p>A generator may use either <code>*args</code> (var positional) or POSITIONAL_OR_KEYWORD parameters — but not both simultaneously.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Valid — only *args</span>
+<p><div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Valid — only *args</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">enum</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span> <span class="o">...</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Valid — only POSITIONAL_OR_KEYWORD params</span>
@@ -2227,9 +2227,8 @@ this function is responsible for dynamically building the registry of generators
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Invalid — POSITIONAL_OR_KEYWORD params with *args (var positional)</span>
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">invalid_gen</span><span class="p">(</span><span class="n">extra</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="c1"># WHY ? Because the Semantic Validator for the DSL cannot currently handle this combination. It would require a more complex parsing logic to determine which arguments are meant for `*args` and which are actual positionals parameters, especially since the user can pass any number of values for `*args`. To keep things simple and unambiguous, we enforce this constraint.</span>
 </code></pre></div>
+WHY ? Because the Semantic Validator for the DSL cannot currently handle this combination. It would require a more complex parsing logic to determine which arguments are meant for <code>*args</code> and which are actual positionals parameters, especially since the user can pass any number of values for <code>*args</code>. To keep things simple and unambiguous, we enforce this constraint.</p>
 <div class="admonition note">
 <p class="admonition-title">About union types</p>
 <p>The current implementation of the docstring parser and the semantic validator does not support union types (e.g., <code>str | int</code>) in generator signatures. This will be updated in future updates. and no, even Any is not supported too.</p>
@@ -2237,10 +2236,20 @@ this function is responsible for dynamically building the registry of generators
 <hr />
 <h2 id="adding-new-generators">Adding new generators</h2>
 <p>To add a new generator, simply define a function in any non-private module under <code>copia.generators</code> and ensure it follows the constraints outlined above. The function will be automatically registered and available for use in the DSL.</p>
+<ul>
+<li>
 <p>first check if the module you want to add the generator to already exists. If it does, add your function there. If not, create a new module and add your function there.</p>
+</li>
+<li>
 <p>since the registry is built dynamically, you don't need to do anything else to make your generator available — just define it and it will be picked up when the module is imported.</p>
+</li>
+<li>
 <p>to ensure your generator is properly documented, follow the docstring format outlined in the <a href="../docstrings/">docstrings guide</a>. This will help users understand how to use your generator and what it does.</p>
+</li>
+<li>
 <p>and to finish, simply run pytest tests/test_generators_discover.py to avoid any import warnings or errors related to your new generator. If you see an ImportWarning about overriding a generator, it means you have a naming conflict — either rename your generator or remove the conflicting one. If you see an error about <code>**kwargs</code> or invalid parameter combinations, adjust your function signature accordingly.</p>
+</li>
+</ul>
 <blockquote>
 <p>just keep in mind, the function signature is a direct interface to users, so keep it simple and intuitive. Avoid complex parameter combinations that could confuse users or make the generator difficult to use in the DSL. The goal is to provide a clear and straightforward way for users to generate data without having to worry about the underlying implementation details.</p>
 </blockquote>
@@ -2293,7 +2302,7 @@ this function is responsible for dynamically building the registry of generators
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.indexes", "toc.integrate", "content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.tabs.sticky"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.sections", "navigation.indexes", "toc.integrate", "content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.tabs.sticky", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
