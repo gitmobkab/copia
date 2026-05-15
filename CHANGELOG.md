@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- security improvements against sql injections
 - official postgres adapter
 - unique keyword and generated values
 
