@@ -1,26 +1,25 @@
 import typer
-from copia.cli.console_utils import echo
+from copia.cli.utils.console_utils import echo
 
 from ..config.loaders import load_config, get_profile_from_config
 from ..config.exceptions import InvalidProfileError
 
-list_profile_app = typer.Typer()
+list_command = typer.Typer()
 
-@list_profile_app.command("list")
-def list_profiles(
-    ctx: typer.Context,
-    help_flag: bool = 
-                typer.Option(False, "-h", "--help", help="Display this message and exit")):
+# now that i look at it, it's horrible
+# better refactor that shit soon
+
+# TODO: FUCKING REFACTOR THAT, IT'S UGLY JUST BY SCROLLING
+# I DON'T WANNA THINK ABOUT WHY I WROTE IT LIKE THAT 
+
+@list_command.command("list")
+def main():
     
-    """[blue]list all profiles defined in both global and local config files"""
+    """List all profiles defined in both global and local config files."""
     local_config = None
     global_config = None
     local_failure_reason = None
     global_failure_reason = None
-    
-    if help_flag:
-        echo(ctx.get_help())
-        return
     
     try:
         local_config = load_config("local")

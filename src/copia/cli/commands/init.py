@@ -4,8 +4,8 @@ from importlib.resources import files
 from rich.prompt import Confirm
 import typer
 
-from copia.cli.exit_codes import ExitCodes
-from copia.cli.console_utils import echo, print_error, info, warning, success
+from copia.cli.utils.exit_codes import ExitCodes
+from copia.cli.utils.console_utils import echo, print_error, info, warning, success
 from ..config.loaders import (
     resolve_config_path
 )
@@ -19,9 +19,9 @@ def main(ctx: typer.Context,
         is_global_config: bool = typer.Option(
     False, "-g", "--global", help="create the config file as a global config"
 )):
-    """[blue]generate a template config file for copia[/]
+    """Generate a template config file for copia.
     
-    by default it create a local scoped config file
+    By default it create a local scoped config file
     """
     
     if help_flag:
