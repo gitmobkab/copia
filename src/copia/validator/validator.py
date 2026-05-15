@@ -32,9 +32,7 @@ class SemanticValidator:
 
     def validate_one(self, call: GeneratorCall) -> None:
         if call.name not in self.registry:
-            raise UnknownGeneratorException(
-                f"Unknown generator: '{call.name}'"
-            )
+            raise UnknownGeneratorException(call.name)
 
         function_call = self.registry[call.name]
         function_signature = self._normalize(signature(function_call))
