@@ -11,7 +11,7 @@ import tomllib
 
 from pydantic import ValidationError
 
-from .globals import  CONFIG_SCOPES, LOCAL_COPIA_FILE, GLOBAL_COPIA_FILE
+from .globals import  ConfigScope, LOCAL_COPIA_FILE, GLOBAL_COPIA_FILE
 from .models import Profile
 from .exceptions import (
     FoundProfileIsNotATableError,
@@ -39,17 +39,17 @@ def parse_toml_file(path: Path) -> dict[str, Any]:
     return tomllib.loads(path.read_text())
 
 
-def resolve_config_path(scope: CONFIG_SCOPES) -> Path:
+def resolve_config_path(scope: ConfigScope) -> Path:
     if scope == "global":
         return GLOBAL_COPIA_FILE
     elif scope == "local":
         return LOCAL_COPIA_FILE
 
-def load_config(scope: CONFIG_SCOPES) -> dict[str, Any]:
+def load_config(scope: ConfigScope) -> dict[str, Any]:
     """load the content of the config file linked to scope
 
     Args:
-        scope (CONFIG_SCOPES): think of it as where to look the config file, either "local" or "global"
+        scope (ConfigScope): think of it as where to look the config file, either "local" or "global"
 
     Raises:
         FileNotFoundError: when the file couldn't be found.
@@ -108,12 +108,12 @@ def get_profile_from_config(profile_name: str, config: dict) -> Profile:
         raise InvalidProfileError(Err)
 
 
-def get_profile(profile_name: str, scope: CONFIG_SCOPES) -> Profile:
+def get_profile(profile_name: str, scope: ConfigScope) -> Profile:
     """try to get a valid profile from config based on scope
 
     Args:
         profile_name (str): the name by which the profile is identified
-        scope (CONFIG_SCOPES): think of it as where to look the config file, either "local" or "global"
+        scope (ConfigScope): think of it as where to look the config file, either "local" or "global"
 
     Raises:
         FileNotFoundError: when the file couldn't be found.

@@ -1,5 +1,5 @@
 import typer
-
+from typing import get_args
 from copia._version import __version__
 from .commands import (
     list_command,
@@ -7,11 +7,23 @@ from .commands import (
     playground_command,
     run_command
 )
+from .config import Adapter
 from .utils import echo
 
 
+AVAILABLES_ADAPTERS: tuple = get_args(Adapter)
+
+def get_help_msg():
+    help_msg = "An Interactive TUI app for Databases seeding"
+    help_msg += "\n\nSupported databases:"
+    for value in AVAILABLES_ADAPTERS:
+        help_msg += f'\n- {value}'
+    return help_msg
+
 app = typer.Typer(
     name='copia',
+    help=get_help_msg(),
+    no_args_is_help=True,
     invoke_without_command=True,
     context_settings={
         'help_option_names': ['--help', '-h']
@@ -30,10 +42,7 @@ def main(
     version_flag: bool = typer.Option(False, 
                                  "-v", "--version",
                                  help="Display the current version and exit"),
-    ):
-    
-    """An Interactive TUI app for MySQL Database seeding"""
-    
+    ):    
     if ctx.invoked_subcommand is not None:
         return
             
