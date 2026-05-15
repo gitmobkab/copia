@@ -102,8 +102,8 @@ class CopiaApp(App):
             parsed_columns = parse(code_editor_content)
             results_viewer.info("parsing your input...")
             results_viewer.success("Looks good")
-            for column in parsed_columns:
-                self._validator.validate(column.generator)
+            generators_calls = [column.generator for column in parsed_columns]
+            self._validator.validate_many(generators_calls)
         except Exception as err:
             results_viewer.error(err)
             return
