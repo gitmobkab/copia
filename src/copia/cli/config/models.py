@@ -13,18 +13,19 @@ NotEmptyStr = Annotated[str, StringConstraints(
 Port = Annotated[int, Field(
     ge= PORT_MIN_VAL,
     le= PORT_MAX_VAL,
-    strict=True
+    strict=True,
+    description="The Database Port"
 )]
 
 class Profile(BaseModel):
     model_config = ConfigDict(extra="forbid")
     
-    adapter: Adapter
-    host: Union[IPvAnyAddress, NotEmptyStr]
+    adapter: Adapter = Field(description="The copia Adapter to use")
+    host: Union[IPvAnyAddress, NotEmptyStr] = Field(description="The database hostname")
     port: Port
-    database: NotEmptyStr
-    user: NotEmptyStr
-    password: str = ""
+    database: NotEmptyStr = Field(description="The Database Port")
+    user: NotEmptyStr = Field(description="The Database Username")
+    password: str = Field("", description="The Database Password")
 
         
     def __str__(self) -> str:
