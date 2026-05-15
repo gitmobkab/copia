@@ -43,7 +43,7 @@ def dim(msg: str) -> None:
     stdout_console.print(f"[dim]{msg}")
 
 
-def print_error(err: object, help_msg: str = "") -> None:
+def print_error(err: object, help_msg: str | None = None) -> None:
     body = str(err)
     if help_msg:
         body = f"[on {COLORS['info']}] HINT [/] {help_msg}\n{body}"

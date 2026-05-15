@@ -5,32 +5,40 @@ from copia.parser.models import Column, GeneratorCall
 from copia.generators import GENERATORS_REGISTRY, GeneratorValueError
 from copia.adapters import BaseAdapter
 
-DB_DATA_COLLECTION: TypeAlias = dict[str,
+DBDataCollection: TypeAlias = dict[str,
                                  dict[
                                     str, list
                                  ]
                                  ]
 
+GeneratedRow: TypeAlias = dict[str, Any]
+
 
 def generate_rows(
-    adapter: BaseAdapter,
+    adapter: BaseAdapter | None,
     columns: list[Column],
     rows: int,
     on_column_done: Callable[[str, list[Any]], None] | None = None,
-) -> Generator[dict[str, Any], None, None]:
+) -> Generator[GeneratedRow, None, None]:
     if rows <= 0:
         raise ValueError(f"Expected an integer above 0 for the number of rows, got {rows}")
-    refs = build_refs(adapter, columns)
-    column_data = _generate_columns(columns, rows, refs, on_column_done)
-    keys = list(column_data.keys())
-    for values in zip(*column_data.values()):
+    refs = {}
+ 
+    columns_names = [column.name for column in columns]
+    if adapter:
+        refs = build_refs(adapter, columns)
+    elif adapter is None and "fetch" in columns_names:
+        raise ValueError("Cannot use generator 'fetch' without a database connection")
+    columns_data = _generate_columns(columns, rows, refs, on_column_done)
+    keys = list(columns_data.keys())
+    for values in zip(*columns_data.values()):
         yield dict(zip(keys, values))
 
 
 def _generate_columns(
     columns: list[Column],
     rows: int,
-    refs: DB_DATA_COLLECTION,
+    refs: DBDataCollection,
     on_column_done: Callable[[str, list[Any]], None] | None = None,
 ) -> dict[str, list[Any]]:
     result: dict[str, list[Any]] = {}
@@ -45,7 +53,7 @@ def _generate_columns(
             on_column_done(name, values)
     return result
 
-def _generate_unique_values(column: Column, refs: DB_DATA_COLLECTION, rows: int, max_attempts: int = 1000):
+def _generate_unique_values(column: Column, refs: DBDataCollection, rows: int, max_attempts: int = 1000):
     seen = set()
     values = []
     for _ in range(rows):
@@ -63,7 +71,7 @@ def _generate_unique_values(column: Column, refs: DB_DATA_COLLECTION, rows: int,
             )
     return values
 
-def run_column(column: Column, refs: DB_DATA_COLLECTION) -> Any:
+def run_column(column: Column, refs: DBDataCollection) -> Any:
     generator_name = column.generator.name
     if generator_name == "fetch":
         return run_fetch(column.generator, refs)
@@ -72,7 +80,7 @@ def run_column(column: Column, refs: DB_DATA_COLLECTION) -> Any:
     return generator_func(*params.positionals, **params.named)
 
 
-def run_fetch(ref_call: GeneratorCall, refs: DB_DATA_COLLECTION) -> Any:
+def run_fetch(ref_call: GeneratorCall, refs: DBDataCollection) -> Any:
     table, column = _get_ref_data(ref_call)
     ref_choices = refs[table][column]
     if ref_choices:
@@ -80,12 +88,12 @@ def run_fetch(ref_call: GeneratorCall, refs: DB_DATA_COLLECTION) -> Any:
     raise GeneratorValueError(f"No values found in db at {table!r}.{column!r}", "fetch")
 
 
-def build_refs(adapter: BaseAdapter, columns: list[Column]) -> DB_DATA_COLLECTION:
+def build_refs(adapter: BaseAdapter, columns: list[Column]) -> DBDataCollection:
     refs = _initialize_refs(columns)
     return _populate_refs(adapter, refs)
 
-def _initialize_refs(columns: list[Column]) -> DB_DATA_COLLECTION:
-    refs: DB_DATA_COLLECTION = {}
+def _initialize_refs(columns: list[Column]) -> DBDataCollection:
+    refs: DBDataCollection = {}
     for column in columns:
         if column.generator.name != "fetch":
             continue
@@ -95,7 +103,7 @@ def _initialize_refs(columns: list[Column]) -> DB_DATA_COLLECTION:
         refs[table_name][column_name] = []
     return refs
         
-def _populate_refs(adapter: BaseAdapter, refs: DB_DATA_COLLECTION) -> DB_DATA_COLLECTION:
+def _populate_refs(adapter: BaseAdapter, refs: DBDataCollection) -> DBDataCollection:
     for table, columns in refs.items():
         try:
             rows = adapter.fetch(table, list(columns.keys()))

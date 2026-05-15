@@ -6,8 +6,8 @@ class TestUnknownGenerator:
     def test_unknown_name_raises(self):
         call = make_call("does_not_exist")
         with pytest.raises(UnknownGeneratorException):
-            VALIDATOR.validate(call)
+            VALIDATOR.validate_one(call)
 
     def test_known_name_does_not_raise(self):
         call = make_call("fake_name")
-        VALIDATOR.validate(call)
+        VALIDATOR.validate_one(call)

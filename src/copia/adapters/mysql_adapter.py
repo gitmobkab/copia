@@ -69,11 +69,16 @@ class MySQLAdapter(BaseAdapter):
         query = f"INSERT INTO {table} ({columns_query}) VALUES ({placeholders})"
 
         iterator = iter(rows)
-        with self._connection.cursor() as cursor:
-            while batch := list(islice(iterator, batch_size)):
-                coerced_batch = list(map(self._coerce_row, batch))
-                cursor.executemany(query, coerced_batch)
-        self._connection.commit()
+        
+        try:
+            with self._connection.cursor() as cursor:
+                while batch := list(islice(iterator, batch_size)):
+                    coerced_batch = list(map(self._coerce_row, batch))
+                    cursor.executemany(query, coerced_batch)
+            self._connection.commit()
+        except Exception as err:
+            self._connection.rollback()
+            raise err
         
     def _coerce_row(self, row: dict[str, Any]) -> dict[str, Any]:
         coerced_row: dict[str, Any] = {}

@@ -3,7 +3,7 @@ from typing import Annotated, Union
 from pydantic import BaseModel, Field, StringConstraints, ConfigDict
 from pydantic.networks import IPvAnyAddress
 
-from .globals import SUPPORTED_ADAPTERS, PORT_MIN_VAL, PORT_MAX_VAL
+from .globals import Adapter, PORT_MIN_VAL, PORT_MAX_VAL
 
 
 NotEmptyStr = Annotated[str, StringConstraints(
@@ -19,7 +19,7 @@ Port = Annotated[int, Field(
 class Profile(BaseModel):
     model_config = ConfigDict(extra="forbid")
     
-    adapter: SUPPORTED_ADAPTERS
+    adapter: Adapter
     host: Union[IPvAnyAddress, NotEmptyStr]
     port: Port
     database: NotEmptyStr

@@ -1,6 +1,8 @@
+from pathlib import Path
+
 from lark import Lark
 from lark.exceptions import VisitError
-from pathlib import Path
+
 from copia.parser.transformer import CopiaTransformer
 from copia.parser.models import Column
 
