@@ -1,3 +1,5 @@
+from copia.suggestions import get_generator_suggestions
+
 class ValidationError(Exception):
     ...
 
@@ -8,7 +10,7 @@ class CaughtValidationError(ValidationError):
         self.validation_err = validation_err
         
     def __str__(self) -> str:
-        return f"Error on column {self.column_index}:\n\t{self.validation_err}"
+        return f"Error on column {self.column_index}:\n{self.validation_err}"
     
 class ValidationErrors(ValidationError):
     
@@ -20,7 +22,18 @@ class ValidationErrors(ValidationError):
         return f"\n{seperator}\n".join(str(err) for err in self.errors)
     
 class UnknownGeneratorException(ValidationError):
-    pass
+    
+    def __init__(self, name: str) -> None:
+        self.name = name
+        """the passed name of the unknwon generator"""
+        self._suggestions = get_generator_suggestions(name)
+        
+    def __str__(self):
+        msg = f"Unknown generator: {self.name!r}"
+        if self._suggestions:
+            msg += "\nDid you mean?:\n"
+            msg += "\n".join(f"   - {s}" for s in self._suggestions)
+        return msg
 
 class TooManyPositionalsException(ValidationError):
     pass
