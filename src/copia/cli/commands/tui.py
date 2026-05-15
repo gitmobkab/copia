@@ -5,9 +5,9 @@ from ..config import GLOBAL_COPIA_FILE, LOCAL_COPIA_FILE
 from ..utils.console_utils import success
 from ..utils import load_adapter_from_profile
 
-playground_command = Typer()
+tui_command = Typer()
 
-@playground_command.command('playground')
+@tui_command.command('tui')
 def main(
     profile_name: str = Argument('default',
                                 help="the name of the profile to use for the session"),

@@ -4,7 +4,7 @@ from copia._version import __version__
 from .commands import (
     list_command,
     init_command,
-    playground_command,
+    tui_command,
     run_command
 )
 from .config import Adapter
@@ -32,7 +32,7 @@ app = typer.Typer(
 
 app.add_typer(init_command)
 app.add_typer(list_command)
-app.add_typer(playground_command)
+app.add_typer(tui_command)
 app.add_typer(run_command)
 
 @app.callback()
