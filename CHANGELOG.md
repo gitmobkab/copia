@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - security improvements against sql injections
 - official postgres adapter
 - unique keyword and generated values
+- a `copia run` command
 
 ### Changed
 
+- the tui can now be launch with `copia tui` rather than `copia`
 - the dsl syntax now explicitly require parantheses after the name of a generator
 - the `ref` generator is now called `fetch` as the name is more intuitive
 - the cli logs messages appereance
