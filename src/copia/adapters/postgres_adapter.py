@@ -70,13 +70,16 @@ class PostgresAdapter(BaseAdapter):
             self.escape_columns(columns),
             SQL(", ").join(placeholders)
         )
-    
-        iterator = iter(rows)
-        with self._connection.cursor() as cursor:
-            while batch := list(islice(iterator, batch_size)):
-                cursor.executemany(composed_query, batch)
-        self._connection.commit()
-        
+
+        try:
+            iterator = iter(rows)
+            with self._connection.cursor() as cursor:
+                while batch := list(islice(iterator, batch_size)):
+                    cursor.executemany(composed_query, batch)
+            self._connection.commit()
+        except Exception as err:
+            self._connection.rollback()
+            raise err       
 
     def close(self) -> None:
         self._connection.close()
