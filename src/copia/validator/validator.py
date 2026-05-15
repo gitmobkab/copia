@@ -4,6 +4,9 @@ from typing import get_args, get_origin, Literal, Callable, Any
 from copia.parser.models import GeneratorCall, POSITIONALS, NAMED, TYPES
 from .models import NormalizedSignature
 from .exceptions import (
+    ValidationError,
+    CaughtValidationError,
+    ValidationErrors,
     UnknownGeneratorException,
     TooManyPositionalsException,
     UnknownNamedParamException,
@@ -16,7 +19,18 @@ class SemanticValidator:
     def __init__(self, registry: dict[str, Callable]):
         self.registry = registry
 
-    def validate(self, call: GeneratorCall) -> None:
+    def validate_many(self, calls: list[GeneratorCall]) -> None:
+        validation_errors : list[CaughtValidationError] = []
+        for index, call in enumerate(calls, 1):
+            try:
+                self.validate_one(call)
+            except ValidationError as validation_err:
+                caught_err = CaughtValidationError(index, validation_err)
+                validation_errors.append(caught_err)
+        if validation_errors:
+            raise ValidationErrors(*validation_errors)
+
+    def validate_one(self, call: GeneratorCall) -> None:
         if call.name not in self.registry:
             raise UnknownGeneratorException(
                 f"Unknown generator: '{call.name}'"
