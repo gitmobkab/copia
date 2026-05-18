@@ -68,7 +68,7 @@ birthdate:  date_of_birth()
 
 # seed the posts table — references existing users
 id:      uuid()
-user_id: ref('users.id')
+user_id: fetch('users.id')
 body:    paragraph()
 date:    past_date()
 ```

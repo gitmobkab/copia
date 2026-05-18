@@ -42,20 +42,20 @@ Copia looks for config in two places:
 ## 2. Launch Copia
 
 ```bash
-copia
+copia tui
 ```
 
 This uses the `default` profile from your config. To use a different profile:
 
 ```bash
-copia --profile staging
+copia tui staging
 ```
 
 To force local or global config lookup:
 
 ```bash
-copia --local    # only reads .copia.toml
-copia --global   # only reads the global config
+copia tui --local    # only reads .copia.toml
+copia tui --global   # only reads the global config
 ```
 
 ---

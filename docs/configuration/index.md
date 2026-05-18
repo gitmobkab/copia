@@ -51,6 +51,7 @@ The database adapter to use.
 | Value | Database |
 |-------|----------|
 | `"mysql"` | MySQL / MariaDB |
+| `"postgres"` | PostgreSQL
 
 ```toml
 adapter = "mysql"
@@ -130,10 +131,10 @@ user = "admin"
 password = "secret"
 ```
 
-Switch between profiles with the `--profile` flag:
+Switch between profiles with the `profile_name` argument:
 
 ```bash
-copia --profile staging
+copia tui staging
 ```
 
 ---
@@ -153,7 +154,9 @@ adapter = "mysql"
 Then referenced as:
 
 ```bash
-copia --profile "my profile"
+copia tui "my profile" # launch tui with the profile named "my profile"
+
+copia tui staging # launch the tui with the profile named staging
 ```
 
 ### Extra fields are forbidden
@@ -170,26 +173,13 @@ user = "root"
 timeout = 30  # ❌ not a valid field, copia will raise an error
 ```
 
-### ASCII constraint on `database` and `user`
-
-The `database` and `user` fields must contain ASCII characters only.
-Non-ASCII characters — including accented letters and Unicode — will be rejected:
-
-```toml
-user = "rené"   # ❌ invalid
-user = "rene"   # ✓
-```
-
-!!! note "This might change in the future"
-    The ASCII constraint is a temporary measure to ensure compatibility with all database servers. Future versions of Copia may remove this requirement.
-
 ## Editing the config file
 
 copia does not provide built-in commands for editing the config file. Use your preferred text editor to modify the TOML file directly.
 
 however if your IDE supports [taplo](https://taplo.tamasfe.dev/) or [Even Better TOML on vscode](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml).
 
-Add this line at the top of your `.copia.toml` or `profiles.toml`:
+Add this line at the top of your `.copia.toml` or `copia/profiles.toml`:
 
 ```toml
 #:schema https://raw.githubusercontent.com/gitmobkab/copia/main/docs/configuration/schema.json

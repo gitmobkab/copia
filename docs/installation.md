@@ -48,4 +48,16 @@ copia --version
 
 ## Database support
 
-Copia v1 supports **MySQL and MariaDB** out of the box. PostgreSQL support is planned for a future release.
+Copia come with supports for **MySQL and MariaDB** out of the box. 
+
+To use copia with other dbs, you can install the corresponding adapter optional dependency
+
+for example on pip, the following command `pip install "copia-seed[postgres]"` will install the postgres adapter for copia
+
+### Additional adapters
+
+Those aren't pre-installed adapters.
+
+| Adapter name | Database |
+|--------------|----------|
+| `postgres` | postgreSQL |
