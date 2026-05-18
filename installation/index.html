@@ -586,6 +586,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Database support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional adapters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -2156,7 +2173,25 @@
 </code></pre></div>
 <hr />
 <h2 id="database-support">Database support</h2>
-<p>Copia v1 supports <strong>MySQL and MariaDB</strong> out of the box. PostgreSQL support is planned for a future release.</p>
+<p>Copia come with supports for <strong>MySQL and MariaDB</strong> out of the box. </p>
+<p>To use copia with other dbs, you can install the corresponding adapter optional dependency</p>
+<p>for example on pip, the following command <code>pip install "copia-seed[postgres]"</code> will install the postgres adapter for copia</p>
+<h3 id="additional-adapters">Additional adapters</h3>
+<p>Those aren't pre-installed adapters.</p>
+<table>
+<thead>
+<tr>
+<th>Adapter name</th>
+<th>Database</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>postgres</code></td>
+<td>postgreSQL</td>
+</tr>
+</tbody>
+</table>
 
 
 
