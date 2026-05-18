@@ -1,10 +1,9 @@
 from typing import Generator
 
 from copia.runners import GeneratedRow
-from .utils import get_dict_values_as_str
+from .csv_formatter import format_to_csv
 
 
 def format_to_sql(rows: list[GeneratedRow]) -> Generator[str, None, None]:
-    for row in rows:
-        printable_row = get_dict_values_as_str(row)
-        yield f"({printable_row})"
+    for row in format_to_csv(rows):
+        yield f"({row})"

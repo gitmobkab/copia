@@ -6,7 +6,7 @@ from .utils import get_dict_values_as_str
 
 def format_to_csv(rows: list[GeneratedRow]) -> Generator[str, None, None]:
     if not rows:
-        raise ValueError("rows cannot be empty")
+        raise ValueError("rows can't be empty")
     columns_names = rows[0].keys()
     yield ", ".join(columns_names)
     

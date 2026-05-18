@@ -15,7 +15,7 @@ The interface is divided into three areas:
 │                 │  Copia DSL Editor                │
 │  Database tree  │                                  │
 │                 ├──────────────────────────────────┤
-│                 │  Action bar (table, rows, buttons)│
+│                 │ Action bar (table, rows, buttons)│
 │                 ├──────────────────────────────────┤
 │                 │  Results viewer (logs / results) │
 └─────────────────┴──────────────────────────────────┘
@@ -94,7 +94,7 @@ Use **Reset** to revert the controls to the last applied settings. Use **Apply**
 | `?` | Open the help screen |
 | `Escape` | Close the help screen |
 | `q` | Quit copia |
-| `^p` | Open the command palette |
+| `Ctrl + p` | Open the command palette |
 
 ---
 

@@ -8,7 +8,7 @@ stderr_console = Console(stderr=True)
 stdout_console = Console()
 
 COPIA_DOC_LINK = "https://gitmobkab.github.io/copia/"
-SUBTITLE_HELP = f"[dim]See [blue]{COPIA_DOC_LINK}[/blue] for help."
+SUBTITLE_HELP = f"[bold white]See [blue]{COPIA_DOC_LINK}[/blue] for help."
 
 COLORS : dict[str, str] = {
     "info": "#008080",

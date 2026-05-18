@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-05-18
+
+### Fixed
+
+- Fixed bugs when using the `run` command `--skip-config` and `--skip-confirm` flags.
+- Fixed json formatter to return proper json text
+- Fixed error message in the csv formatter
+
+### Changed
+
+- Downgrade minimum required python version to 3.11.
+- Updated the exits codes.
+- the generator suggestions system to be more forgiving
+
 ## [0.3.0] - 2026-05-15
 
 ### Added
