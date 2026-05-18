@@ -19,7 +19,7 @@ def main(
                                             "-l", "--local",
                                             help=f"Search only in [green]'{LOCAL_COPIA_FILE}'")
     ):
-    """launch the interactive tui
+    """Launch the interactive tui
     """
 
     adapter = load_adapter_from_profile(profile_name, search_globals_only, search_locals_only)
