@@ -24,10 +24,10 @@ def generate_rows(
         raise ValueError(f"Expected an integer above 0 for the number of rows, got {rows}")
     refs = {}
  
-    columns_names = [column.name for column in columns]
+    generators_names = [column.generator.name for column in columns]
     if adapter:
         refs = build_refs(adapter, columns)
-    elif adapter is None and "fetch" in columns_names:
+    elif adapter is None and "fetch" in generators_names:
         raise ValueError("Cannot use generator 'fetch' without a database connection")
     columns_data = _generate_columns(columns, rows, refs, on_column_done)
     keys = list(columns_data.keys())
