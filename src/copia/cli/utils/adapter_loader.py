@@ -19,8 +19,8 @@ def load_adapter_from_profile(profile_name: str, global_flag: bool, local_flag: 
         return adapter
     except ImportError:
         print_error(f"Missing dependencies for adapter {profile.adapter!r}",
-                    f'Try "pip install copia-seed\\[{profile.adapter}]"')
+                    f'Try pip install "copia-seed\\[{profile.adapter}]"')
         raise Exit(ExitCodes.RESOURCE_ERROR)
     except Exception as connection_err:
         print_error(connection_err)
-        raise Exit(ExitCodes.CONNEXION_TO_DB_FAILED)
+        raise Exit(ExitCodes.CONNEXION_TO_DB_REFUSED)
