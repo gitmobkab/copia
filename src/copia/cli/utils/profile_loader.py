@@ -28,9 +28,9 @@ def load_profile(profile_name: str, global_flag: bool, local_flag: bool) -> Prof
 
     try:
         if global_flag:
-            profile = get_profile(profile_name, "global")
+            profile = _load_profile(profile_name, "global")
         elif local_flag:
-            profile = get_profile(profile_name, "local")
+            profile = _load_profile(profile_name, "local")
         else:
             profile = get_any_profile(profile_name)
             
@@ -75,12 +75,12 @@ def get_any_profile(profile_name: str):
         Profile: a valid Profile object
     """
     try:
-        return __load_profile__(profile_name, 'local')
+        return _load_profile(profile_name, 'local')
     except Exception as err:
         error(f"{err}")
         info("Falling back to global config...")
-        return __load_profile__(profile_name, 'global')
+        return _load_profile(profile_name, 'global')
     
-def __load_profile__(profile_name: str, scope: ConfigScope) -> Profile:
+def _load_profile(profile_name: str, scope: ConfigScope) -> Profile:
     info(f"Fetching profiles.{profile_name!r} from {scope!r} config...")
     return get_profile(profile_name, scope)

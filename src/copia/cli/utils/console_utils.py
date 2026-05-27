@@ -17,6 +17,10 @@ COLORS : dict[str, str] = {
     "error": "#8b0000"
 }
 
+def disable_consoles_output(quiet: bool = True) -> None:
+    global stdout_console
+    stdout_console.quiet = quiet
+
 def _log(msg: str, level: str, color: str, err: bool = False) -> None:
     console = stderr_console if err else stdout_console
     label = Text(f" {level} ", style=f"bold white on {color}")
