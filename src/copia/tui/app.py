@@ -11,7 +11,6 @@ from copia.parser.models import Column
 from copia.validator import SemanticValidator
 from copia.generators import (
     GENERATORS_REGISTRY,
-    GeneratorValueError,
     GenerationSettings,
     update_global_faker
 )
@@ -150,7 +149,7 @@ class CopiaApp(App):
                 self.call_from_thread(results_viewer.add_row, row, index)
             else:
                 self.post_message(self.AllRowsGenerated(rows))
-        except GeneratorValueError as err:
+        except Exception as err:
             self.post_message(self.GenerationErrorOccurred(err))
             
     def action_quit(self):
