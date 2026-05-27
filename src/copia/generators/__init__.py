@@ -1,7 +1,7 @@
 import inspect
 import importlib
 from pathlib import Path
-from typing import get_origin, Callable, Any, Literal # stupid ref and whatever
+from typing import get_origin, Callable, Any, Literal, TypeAlias # stupid ref and whatever
 from datetime import date
 from uuid import UUID
 
@@ -9,14 +9,15 @@ from .exceptions import GeneratorValueError
 from ._documentation import generate_generators_markdown
 from ._core import GenerationSettings, update_global_faker
 
-from copia.parser.models import TYPES
 
 ALLOWED_INPUT_TYPES = [int, bool, float, str, Literal]
-ALLOWED_RETURN_TYPES = [*ALLOWED_INPUT_TYPES, date, UUID, TYPES, Any]
+ALLOWED_RETURN_TYPES = [*ALLOWED_INPUT_TYPES, date, UUID, Any] # use Any sparingly
 ALLOWED_INPUT_ORIGINS = [Literal] # aka typing waky types we can't identify without get_origin
 
+GeneratorReturn: TypeAlias = int | bool | float | str | date | UUID | Any
+Generator: TypeAlias = Callable[..., GeneratorReturn]
 
-def _build_generators_registery() -> dict[str, Callable]:
+def _build_generators_registery() -> dict[str, Generator]:
     generators : dict[str, Callable] = {}
     generators_path = Path(__file__).parent
     
@@ -29,7 +30,7 @@ def _build_generators_registery() -> dict[str, Callable]:
         for name, func in inspect.getmembers(module, inspect.isfunction):
             if not name.startswith("_") and func.__module__ == module.__name__:
                 if registered_generator := generators.get(name):
-                    raise ImportWarning(f"Found overrinding generator func at {func.__module__}.{name}"
+                    raise ImportError(f"Found overrinding generator func at {func.__module__}.{name}"
                                         f"\nAlready registered generator identifier at {registered_generator.__module__}.{registered_generator.__name__}")
                 _check_func_signature(func)
                 generators[name] = func
@@ -50,7 +51,7 @@ def _check_func_parameters_kinds(signature: inspect.Signature, func_module: str,
     parameters_kinds: list[inspect._ParameterKind] = []
     for parameter in signature.parameters.values():
         if parameter.kind is inspect.Parameter.VAR_KEYWORD:
-            raise ImportWarning(f"The parameter {parameter.name} in {func_module}.{func_name}, "
+            raise ImportError(f"The parameter {parameter.name} in {func_module}.{func_name}, "
                                 "is of type VAR_KEYWORD (begins with **)."
                                 "\nThis is forbidden by the conventions")
             
@@ -59,7 +60,7 @@ def _check_func_parameters_kinds(signature: inspect.Signature, func_module: str,
     if (inspect.Parameter.POSITIONAL_OR_KEYWORD in parameters_kinds 
         and
         inspect.Parameter.VAR_POSITIONAL in parameters_kinds):
-        raise ImportWarning(
+        raise ImportError(
             "The generator at {func_module} identified by {func_name}, "
             "contains a VAR_POSITIONAL (begin with *) and POSITIONAL_OR_KEYWORD arguments at the same time."
             f"\nSignature: def {func_name}{signature}"
@@ -70,7 +71,7 @@ def _check_func_parameters_types(signature: inspect.Signature, func_module: str,
         try:
             _check_parameter_type(parameter, ALLOWED_INPUT_TYPES, ALLOWED_INPUT_ORIGINS)
         except ImportError as reason:
-            raise ImportWarning(
+            raise ImportError(
                 "PARAMETERS TYPE CHECK FAILED:\n",
                 f"The parameter {parameter.name!r} in {func_module}.{func_name}, ",
                 f"{reason}"
@@ -80,7 +81,7 @@ def _check_func_return_type(signature: inspect.Signature, func_module: str, func
     try:
         _check_annotation(signature.return_annotation, ALLOWED_RETURN_TYPES, ALLOWED_INPUT_ORIGINS)
     except ImportError as reason:
-        raise ImportWarning(
+        raise ImportError(
             "RETURN TYPE CHECK FAILED:\n",
             f"The function located at {func_module}.{func_name}, ",
             f"{reason}"
@@ -99,4 +100,4 @@ def _check_annotation(annotation: Any, allowed: list, origins: list) -> None:
             f"\nALLOWED = {allowed + origins}"
         )
     
-GENERATORS_REGISTRY = _build_generators_registery()
+GENERATORS_REGISTRY: dict[str, Generator] = _build_generators_registery()
