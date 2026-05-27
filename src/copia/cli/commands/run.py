@@ -10,14 +10,17 @@ from copia.parser import parse
 from copia.parser.models import Column
 from copia.runners import generate_rows, GeneratedRow
 from copia.validator import SemanticValidator
-from copia.generators import GENERATORS_REGISTRY
-
+from copia.generators import (
+    GENERATORS_REGISTRY,
+    GeneratorValueError
+)
 from copia.cli.config import (
     LOCAL_COPIA_FILE,
     GLOBAL_COPIA_FILE
 )
 
 from ..utils import (
+    disable_consoles_output,
     echo,
     info,
     error,
@@ -37,7 +40,24 @@ def main(
     
     table: str | None = Option(None,
                                '--table', '-t',
-                               help="the name of the table to commit to. mandatory without the --dumps flag."),
+                               help="the name of the table to commit to. mandatory without the --dumps flag.",
+                               rich_help_panel="Seeding options"),
+
+    skip_confirm: bool = Option(False,
+                            '--skip-confirm', '-S',
+                              rich_help_panel="Seeding options",
+                              help="Skip the confirmation prompt. directly commit the values to the db."),
+
+    rows: int = Option(10,
+                       '--rows', '-n',
+                       help="the number of rows for the run.",
+                       rich_help_panel="Generation options",
+                       min=1),
+            
+    dumps: FormatterId | None = Option(None, 
+                        '--dumps', '-d',
+                        help="dumps the values based on the selected formatter.",
+                        ),
     
     profile_name: str = Option('default',
                                '--profile', '-p',
@@ -54,11 +74,6 @@ def main(
                                             help=f"search only in [green]'{LOCAL_COPIA_FILE}'[/].",
                                             rich_help_panel="Config related options"),
     
-    dumps: FormatterId | None = Option(None, 
-                        '--dumps', '-d',
-                        help="dumps the values based on the selected formatter.",
-                        ),
-    
     skip_config: bool = Option(False,
                                '--skip-config', '-s',
                                help="""disable config lookup for the run.
@@ -66,16 +81,7 @@ def main(
                                """,
                                rich_help_panel="Config related options"),
     
-    rows: int = Option(10,
-                       '--rows', '-n',
-                       help="the number of rows for the run.",
-                       min=1),
-    
-    skip_confirm: bool = Option(False,
-                              '--skip-confirm', '-S',
-                              help="Skip the confirmation prompt. directly commit the values to the db.")
-    
-        ):
+    ):
     """Parse and run a file content
     
     Ex: 
@@ -95,6 +101,9 @@ def main(
         error('--skip-config | -s flag is forbidden without --dumps | -d')
         raise Exit(ExitCodes.BAD_CLI_USAGE)
     
+    if dumps:
+        disable_consoles_output()
+    
     content = file.read()
     columns = parse_and_validate(content)
     if skip_config:
@@ -105,9 +114,15 @@ def main(
     try:
         info("Generating values...")
         generated_rows = list(row for row in generate_rows(adapter, columns, rows, column_notifier))
-    except Exception as err:
+    except (GeneratorValueError, ValueError) as err:
         print_error(err)
         raise Exit(ExitCodes.GENERATION_ERROR)
+    except KeyboardInterrupt:
+        info("Generation cancelled by user")
+        raise Exit()
+    except Exception as unexpected_err:
+        print_error(unexpected_err, 'this is an unexpected error (surely a bug), help us improve copia by reporting it!')
+        raise Exit(ExitCodes.UNEXPECTED_ERROR)
     
     if not dumps:
         assert adapter is not None
@@ -129,7 +144,7 @@ def column_notifier(column: str, values: list) -> None:
 def dump_generated_values(formatter_id: FormatterId, values: list[GeneratedRow]) -> None:
     formatter = get_formatter(formatter_id)
     for formatted_row in formatter(values):
-        echo(formatted_row)
+        print(formatted_row)
 
 def ask_and_seed(table: str , rows: list[GeneratedRow], adapter: BaseAdapter, preview_limit: int = 20) -> None:
     columns = rows[0].keys()

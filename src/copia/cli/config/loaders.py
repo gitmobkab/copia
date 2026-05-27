@@ -4,9 +4,9 @@
     
     see writers.py to modify or add a profile to the config file 
 """
-from typing import Any
 from pathlib import Path
-import tomllib
+from tomlkit import TOMLDocument, parse
+from tomlkit.exceptions import ParseError
 
 
 from pydantic import ValidationError
@@ -21,7 +21,7 @@ from .exceptions import (
     InvalidConfigError
 )
 
-def parse_toml_file(path: Path) -> dict[str, Any]:
+def parse_toml_file(path: Path) -> TOMLDocument:
     """parse path as a toml file and return the configuration
     unsafe function, exceptions must be handled by the caller
 
@@ -31,12 +31,12 @@ def parse_toml_file(path: Path) -> dict[str, Any]:
     Raises:
         FileNotFoundError: when the file couldn't be found.
         PermissionError: when permission to read the file had been denied by the os.
-        TOMLDecodeError: when the content of the file can't be parsed to valid TOML.
+        ParseError: when the content of the file can't be parsed to valid TOML.
         
     Returns:
-    **dict[str, Any]:** the content of the parsed toml file.
+        TOMLDocument: the content of the parsed toml file.
     """
-    return tomllib.loads(path.read_text())
+    return parse(path.read_text())
 
 
 def resolve_config_path(scope: ConfigScope) -> Path:
@@ -45,7 +45,7 @@ def resolve_config_path(scope: ConfigScope) -> Path:
     elif scope == "local":
         return LOCAL_COPIA_FILE
 
-def load_config(scope: ConfigScope) -> dict[str, Any]:
+def load_config(scope: ConfigScope) -> TOMLDocument:
     """load the content of the config file linked to scope
 
     Args:
@@ -57,7 +57,7 @@ def load_config(scope: ConfigScope) -> dict[str, Any]:
         InvalidConfigError: when the config can't be parsed into a valid TOML Document.
 
     Returns:
-    **dict[str, Any]:** the parsed content of the config file.
+        TOMLDocument: the parsed content of the config file.
     """
 
     path = resolve_config_path(scope)
@@ -67,7 +67,7 @@ def load_config(scope: ConfigScope) -> dict[str, Any]:
         raise FileNotFoundError(f"{scope} config file not found at '{path}'")
     except PermissionError:
         raise PermissionError(f"not enough permissions to read {scope} config file at '{path}'")
-    except tomllib.TOMLDecodeError as TOMLErr:
+    except ParseError as TOMLErr:
         raise InvalidConfigError(f"{scope} config file is not a valid TOML file: {TOMLErr}")
       
 
@@ -98,7 +98,7 @@ def get_profile_from_config(profile_name: str, config: dict) -> Profile:
         raise ProfilesKeyIsNotATableError("The config file 'profiles' key is not a TOML Table.")
     profile_data = profiles.get(profile_name)
     if profile_data is None:
-        raise ProfileNotFoundError(f"{profile_name} not found")
+        raise ProfileNotFoundError(f"profile {profile_name!r} not found")
     if not isinstance(profile_data, dict):
         raise FoundProfileIsNotATableError(profile_name)
 

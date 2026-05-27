@@ -1,11 +1,17 @@
-from typing import Literal, TypeAlias
-from .types import Formatter
+from typing import Literal, TypeAlias, Callable, Generator
+
+from copia.runners import GeneratedRow
 
 from .csv_formatter import format_to_csv
 from .json_formatter import format_to_json
 from .sql_formatter import format_to_sql
 
 FormatterId: TypeAlias = Literal['csv','json', 'sql']
+
+Formatter: TypeAlias = Callable[
+    [list[GeneratedRow]],
+    Generator[str, None, None]
+]
 
 REGISTERED_FORMATTERS: dict[FormatterId, Formatter] = {
     'csv': format_to_csv,

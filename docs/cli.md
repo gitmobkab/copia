@@ -57,7 +57,9 @@ Supported shells: Bash, Zsh, Fish, PowerShell.
 
 Generate a template config file.
 
-#### **Usage:** `copia init [OPTIONS]`
+#### **Usage**
+
+**Usage:** `copia init [OPTIONS]`
 
 By default, creates a local `.copia.toml` in the current directory.
 
@@ -84,7 +86,9 @@ copia init --global
 
 List all profiles defined across both global and local config files.
 
-#### **Usage:** `copia list [OPTIONS]`
+#### **Usage**
+
+**Usage:** `copia list [OPTIONS]`
 
 #### **Options**
 
@@ -136,7 +140,9 @@ copia list
 
 Launch the interactive tui.
 
-#### **Usage:** `copia tui [OPTIONS] [PROFILE_NAME]`
+#### **Usage**
+
+**Usage:** `copia tui [OPTIONS] [PROFILE_NAME]`
 
 #### **Arguments**
 
@@ -160,12 +166,12 @@ copia tui
 
 copia tui staging
 
-copia tui -g # (1)!
+copia tui --global # (1)!
 
-copia tui -g "mark-and-deceive" # (2)!
+copia tui --global "mark-and-deceive" # (2)!
 ```
 
-1. look for the profile named "default" **only** in the global config file
+1. look for the profile named "default" **only** in the global config file, skip the local config entirely
 2. look for the profile named "mark-and-deceive" **only** in the local config, no fallback to the global config
 
 
@@ -173,7 +179,9 @@ copia tui -g "mark-and-deceive" # (2)!
 
 Parse and run a file content
 
-#### **Usage:** `copia run [OPTIONS] [FILE]`
+#### **Usage**
+
+**Usage:** `copia run [OPTIONS] [FILE]`
 
 #### **Arguments**
 
@@ -207,7 +215,7 @@ Parse and run a file content
 ```bash title="users.copia"
 id: uuid()
 name: name()
-age: int(0, 50)
+age: ranged_int(0, 50)
 ```
 
 ```bash
@@ -269,4 +277,11 @@ Copia uses structured exit codes to make scripting and error handling predictabl
 | `7` | `GENERATION_ERROR` | An error occurred while generating values. |
 | `8` | `SEEDING_ERROR` | The insertion of generated rows into the database failed. |
 
-These codes are stable across versions and safe to use in scripts.
+!!! note title="Stability notice"
+    These codes are early and might changes upon major future releases
+
+## See also:
+- [DSL Reference](dsl.md) — full language documentation
+- [TUI Guide](quickstart.md) — how to use the interactive TUI
+- [Configuration](configuration.md) — how to set up your config files
+- [Generators](generators/index.md) — all available generators and their parameters

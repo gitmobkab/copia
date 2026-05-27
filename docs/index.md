@@ -51,7 +51,7 @@ Run it for as many rows as you need. Thanks to Faker every value is realistic, f
 
 - **Framework-agnostic.** Works on any relational database, any stack.
 - **Simple language.** If you know what a function call looks like, you know the Copia DSL.
-- **Realistic data.** Built on [Faker](https://faker.readthedocs.io/) — names, emails, addresses, IPs, dates, and more out of the box.
+- **Realistic data.** Built on [Faker](https://faker.readthedocs.io/) names, emails, addresses, IPs, dates, and more out of the box.
 - **Relational-aware.** The [`fetch()`](generators/fetch.md) generator lets you sample from existing rows, so foreign keys just work.
 - **Interactive.** A full TUI lets you write, preview, and insert without leaving your terminal.
 
@@ -59,18 +59,26 @@ Run it for as many rows as you need. Thanks to Faker every value is realistic, f
 
 ## Quick example
 
-```
+```title="users.copia"
 # seed the users table
 id:         uuid()
 username:   username()
 email:      email()
 birthdate:  date_of_birth()
+```
 
+```title="posts.copia"
 # seed the posts table — references existing users
 id:      uuid()
 user_id: fetch('users.id')
 body:    paragraph()
 date:    past_date()
+```
+
+```bash
+# check the result
+copia run --dumps json users.copia
+copia run --dumps json posts.copia
 ```
 
 ---

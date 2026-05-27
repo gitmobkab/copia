@@ -2,16 +2,16 @@ from typing import Any, Callable, Generator, TypeAlias
 from random import choice
 
 from copia.parser.models import Column, GeneratorCall
-from copia.generators import GENERATORS_REGISTRY, GeneratorValueError
+from copia.generators import GENERATORS_REGISTRY, GeneratorValueError, GeneratorReturn
 from copia.adapters import BaseAdapter
 
 DBDataCollection: TypeAlias = dict[str,
-                                 dict[
-                                    str, list
-                                 ]
-                                 ]
+                                    dict[
+                                        str, list
+                                    ]
+                                ]
 
-GeneratedRow: TypeAlias = dict[str, Any]
+GeneratedRow: TypeAlias = dict[str, GeneratorReturn]
 
 
 def generate_rows(
@@ -80,8 +80,8 @@ def run_column(column: Column, refs: DBDataCollection) -> Any:
     return generator_func(*params.positionals, **params.named)
 
 
-def run_fetch(ref_call: GeneratorCall, refs: DBDataCollection) -> Any:
-    table, column = _get_ref_data(ref_call)
+def run_fetch(fetch_call: GeneratorCall, refs: DBDataCollection) -> Any:
+    table, column = _get_fetch_data(fetch_call)
     ref_choices = refs[table][column]
     if ref_choices:
         return choice(ref_choices)
@@ -89,21 +89,21 @@ def run_fetch(ref_call: GeneratorCall, refs: DBDataCollection) -> Any:
 
 
 def build_refs(adapter: BaseAdapter, columns: list[Column]) -> DBDataCollection:
-    refs = _initialize_refs(columns)
-    return _populate_refs(adapter, refs)
+    refs = _initialize_db_collection(columns)
+    return _populate_db_collection(adapter, refs)
 
-def _initialize_refs(columns: list[Column]) -> DBDataCollection:
+def _initialize_db_collection(columns: list[Column]) -> DBDataCollection:
     refs: DBDataCollection = {}
     for column in columns:
         if column.generator.name != "fetch":
             continue
-        table_name, column_name = _get_ref_data(column.generator)
+        table_name, column_name = _get_fetch_data(column.generator)
         if table_name not in refs:
             refs[table_name] = {}
         refs[table_name][column_name] = []
     return refs
         
-def _populate_refs(adapter: BaseAdapter, refs: DBDataCollection) -> DBDataCollection:
+def _populate_db_collection(adapter: BaseAdapter, refs: DBDataCollection) -> DBDataCollection:
     for table, columns in refs.items():
         try:
             rows = adapter.fetch(table, list(columns.keys()))
@@ -115,20 +115,25 @@ def _populate_refs(adapter: BaseAdapter, refs: DBDataCollection) -> DBDataCollec
     return refs
 
 
-def _get_ref_data(ref_call: GeneratorCall) -> tuple[str, str]:
-    if ref_call.params.positionals:
-        ref_input = ref_call.params.positionals[0]
+def _get_fetch_data(fetch_call: GeneratorCall) -> tuple[str, str]:
+    if fetch_call.params.positionals:
+        fetch_input = fetch_call.params.positionals[0]
     else:
-        for value in ref_call.params.named.values(): 
-            ref_input = value
+        for value in fetch_call.params.named.values(): 
+            fetch_input = value
             continue
 
-    return _parse_ref_input(ref_input) # type: ignore
+    return _parse_fetch_input(fetch_input) # type: ignore
     # count the invariants with me 🗣️🗣️ 🔥🔥
         
         
-def _parse_ref_input(ref_input: str) -> tuple[str, str]:
-    content = ref_input.split(".")
-    if len(content) != 2 or not all(content):
-        raise GeneratorValueError("expected reference to match format 'table.column'", "fetch")
-    return content[0], content[1]
+def _parse_fetch_input(fetch_input: str) -> tuple[str, str]:
+    content = fetch_input.split(".")
+    if len(content) != 2:
+        raise GeneratorValueError(f"expected reference to match format 'table.column', got {fetch_input!r}", "fetch")
+    table, column = content
+    if table.strip() == "":
+        raise GeneratorValueError("The table part of the string is empty", "fetch")
+    if column.strip() == "":
+        raise GeneratorValueError("The column part of the string is empty", "fetch")
+    return table, column

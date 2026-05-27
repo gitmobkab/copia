@@ -1,9 +1,36 @@
 from typing import Generator
+from uuid import UUID
+from datetime import date
 
+from copia.generators import GeneratorReturn
 from copia.runners import GeneratedRow
-from .csv_formatter import format_to_csv
+
 
 
 def format_to_sql(rows: list[GeneratedRow]) -> Generator[str, None, None]:
-    for row in format_to_csv(rows):
-        yield f"({row})"
+    if not rows:
+        raise ValueError("Rows can't be empty")
+    columns_names = ", ".join(rows[0].keys())
+    yield f"({columns_names})"
+    for row in rows:
+        values = map(format_value_for_sql, row.values())
+        output = ", ".join(values)
+        yield f"({output})"
+        
+        
+
+def format_value_for_sql(value: GeneratorReturn) -> str:
+    match value:
+        case bool():
+            return "TRUE" if value else "FALSE"
+        case int() | float():
+            return str(value)
+        case UUID():
+            return f"'{value}'"
+        case date():
+            return f"'{value.isoformat()}'"
+        case str():
+            escaped = value.replace("'", "''")
+            return f"'{escaped}'"
+        case _:
+            return f"'{value}'"

@@ -90,7 +90,7 @@ Done.
 pip install copia-seed
 ```
 
-Requires Python 3.13+. MySQL and MariaDB included. PostgreSQL available as an optional dependency.
+Requires Python 3.10+. MySQL and MariaDB included. PostgreSQL available as an optional dependency.
 
 ## Quickstart
 
@@ -106,9 +106,60 @@ copia run --dumps json users.copia --skip-config
 echo "id:uuid() name:username()" | copia run --dumps json --skip-config
 ```
 
+## Usage
+
+For detailed usage instructions, see the [CLI documentation](cli.md).
+
+copia's main entry point is the `copia` command, which has several subcommands for different tasks:
+- `copia tui` : launch the interactive TUI (requires a valid config profile)
+- `copia run` :  parse and run a file content, with options for dumping output, skipping confirmation, and more
+- `copia list` : list all available profiles in the config files
+- `copia init` : create a new config file with a default profile
+
+## Configuration
+
+Copia config files are TOML files that define what we call "profiles".
+
+Those profiles are just named sets of configuration values, that tell copia how to connect to the database.
+
+a config file can have multiples profiles and usually looks like this:
+
+```toml
+[profiles.default]
+adapter = "mysql"
+host = "localhost"
+port = 3306
+database = "mydb"
+user = "root"
+
+[profiles.staging]
+adapter = "postgres"
+host = "staging-db.example.com"
+port = 5432
+database = "stagingdb"
+user = "admin"
+password = "Y@urRe@lly$trongP@ssw0rd"
+```
+
+any command that takes a profile name as an argument or flag will assume the "default" profile if the name is not provided, so in the example above, both `copia tui` and `copia tui staging` will work without issues.
+
+### Scopes
+
+copia supports two scopes for configuration profiles: `global` and `local`.
+
+the global config file is usually located at `{CONFIG_DIR}/copia/profiles.toml` and is meant to store profiles that are shared across all your projects.
+
+while the local config file is located at `.copia.toml` in your project directory and is meant to store profiles that are specific to that project.
+
+In some situations, you might want to limit the search for profiles to a specific config file. 
+
+For example you might have a profile named "staging" in both your global and local config files, but with different connection details, and you want to make sure you're using the one in the global config file.
+
+
+
 ## Documentation
 
-→ **[gitmobkab.github.io/copia](https://gitmobkab.github.io/copia/)**
+→ **[For more details on copia see the documentation](https://gitmobkab.github.io/copia/)**
 
 ---
 

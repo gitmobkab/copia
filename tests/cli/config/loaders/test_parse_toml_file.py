@@ -1,9 +1,9 @@
-import tomllib
 import pytest
+from tomlkit.exceptions import ParseError
 
-
-from tests.cli.config.loaders.utils import VALID_TOML, write_toml
 from copia.cli.config.loaders import parse_toml_file
+
+from .utils import VALID_TOML, write_toml
 
 
 class TestParseTomlFile:
@@ -14,7 +14,7 @@ class TestParseTomlFile:
 
     def test_invalid_toml_raises(self, tmp_path):
         f = write_toml(tmp_path / "config.toml", "not valid toml ][")
-        with pytest.raises(tomllib.TOMLDecodeError):
+        with pytest.raises(ParseError):
             parse_toml_file(f)
 
     def test_file_not_found_raises(self, tmp_path):

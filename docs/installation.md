@@ -50,9 +50,9 @@ copia --version
 
 Copia come with supports for **MySQL and MariaDB** out of the box. 
 
-To use copia with other dbs, you can install the corresponding adapter optional dependency
+To use copia with other dbs, you can install the corresponding adapter optional dependency.
 
-for example on pip, the following command `pip install "copia-seed[postgres]"` will install the postgres adapter for copia
+for example on pip, the following command `pip install "copia-seed[postgres]"` will install the dependency for postgres support.
 
 ### Additional adapters
 
