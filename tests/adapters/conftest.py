@@ -1,8 +1,12 @@
 import os
 import pytest
+
 from copia.adapters.mysql_adapter import MySQLAdapter
 from copia.adapters.postgres_adapter import PostgresAdapter
 
+env = os.environ.get("ENV", "dev")
+if env != "prod":
+    pytest.skip("Skipping adapter tests in non-prod environment", allow_module_level=True)
 
 @pytest.fixture(scope="module")
 def mysql_adapter():

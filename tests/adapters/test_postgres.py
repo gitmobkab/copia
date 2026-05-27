@@ -2,21 +2,18 @@ import pytest
 
 from copia.adapters.postgres_adapter import PostgresAdapter
 
+
 SAMPLE_ROWS = [
     {"id": 1, "email": "alice@test.com", "username": "alice"},
     {"id": 2, "email": "bob@test.com",   "username": "bob"},
     {"id": 3, "email": "carol@test.com", "username": "carol"},
 ]
-
-
 def test_ping(pg_adapter : PostgresAdapter):
     pg_adapter.ping()
-
 
 def test_get_tables(pg_adapter: PostgresAdapter):
     tables = pg_adapter.get_tables()
     assert "users" in tables
-
 
 def test_get_columns(pg_adapter: PostgresAdapter):
     columns = pg_adapter.get_columns("users")
