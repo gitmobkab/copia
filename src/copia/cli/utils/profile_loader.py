@@ -1,7 +1,7 @@
 from typer import Exit
 
 from copia.cli.config import (
-    Profile,
+    BaseProfile,
     get_profile,
     ConfigScope,
     InvalidConfigError,
@@ -20,7 +20,7 @@ VALIDATION_ERRORS = (
     ProfileError
 )
 
-def load_profile(profile_name: str, global_flag: bool, local_flag: bool) -> Profile:
+def load_profile(profile_name: str, global_flag: bool, local_flag: bool) -> BaseProfile:
 
     if global_flag and local_flag:
         error("Cannot use (--global | -g) and (--local | -l) flags at the same time")
@@ -81,6 +81,6 @@ def get_any_profile(profile_name: str):
         info("Falling back to global config...")
         return _load_profile(profile_name, 'global')
     
-def _load_profile(profile_name: str, scope: ConfigScope) -> Profile:
+def _load_profile(profile_name: str, scope: ConfigScope) -> BaseProfile:
     info(f"Fetching profiles.{profile_name!r} from {scope!r} config...")
     return get_profile(profile_name, scope)
