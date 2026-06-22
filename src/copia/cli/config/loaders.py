@@ -12,7 +12,7 @@ from tomlkit.exceptions import ParseError
 from pydantic import ValidationError
 
 from .globals import  ConfigScope, LOCAL_COPIA_FILE, GLOBAL_COPIA_FILE
-from .models import Profile
+from .models import BaseProfile, resolve_profile
 from .exceptions import (
     FoundProfileIsNotATableError,
     ProfilesKeyIsNotATableError,
@@ -71,7 +71,7 @@ def load_config(scope: ConfigScope) -> TOMLDocument:
         raise InvalidConfigError(f"{scope} config file is not a valid TOML file: {TOMLErr}")
       
 
-def get_profile_from_config(profile_name: str, config: dict) -> Profile:
+def get_profile_from_config(profile_name: str, config: dict) -> BaseProfile:
     """try to get a valid profile from config
 
     config must be a dict representation of the config file
@@ -89,7 +89,7 @@ def get_profile_from_config(profile_name: str, config: dict) -> Profile:
         InvalidProfileError: when the profile isn't valid
 
     Returns:
-        Profile: a valid Profile object
+        BaseProfile: a valid BaseProfile object
     """
     profiles = config.get("profiles")
     if profiles is None:
@@ -103,12 +103,12 @@ def get_profile_from_config(profile_name: str, config: dict) -> Profile:
         raise FoundProfileIsNotATableError(profile_name)
 
     try:
-        return Profile(**profile_data)
+        return resolve_profile(profile_data)
     except ValidationError as Err:
         raise InvalidProfileError(Err)
 
 
-def get_profile(profile_name: str, scope: ConfigScope) -> Profile:
+def get_profile(profile_name: str, scope: ConfigScope) -> BaseProfile:
     """try to get a valid profile from config based on scope
 
     Args:
@@ -124,7 +124,7 @@ def get_profile(profile_name: str, scope: ConfigScope) -> Profile:
         InvalidProfileError: when the profile isn't valid
         
     Returns:
-        Profile: a valid Profile object
+        BaseProfile: a valid BaseProfile object
     """
     config = load_config(scope)
     return get_profile_from_config(profile_name, config)
