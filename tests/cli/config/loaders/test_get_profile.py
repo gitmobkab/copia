@@ -4,7 +4,7 @@ from tests.cli.config.loaders.utils import VALID_TOML, RESOLVE_CONGIG_PATH_IMPOR
 
 from copia.cli.config import (
     get_profile,
-    Profile,
+    BaseProfile,
     ProfileNotFoundError,
     InvalidConfigError
 )
@@ -14,7 +14,7 @@ class TestGetProfile:
         f = write_toml(tmp_path / "config.toml", VALID_TOML)
         monkeypatch.setattr(RESOLVE_CONGIG_PATH_IMPORT_STRING, lambda _: f)
         profile = get_profile("dev", "local")
-        assert isinstance(profile, Profile)
+        assert isinstance(profile, BaseProfile)
 
     def test_not_found_raises(self, tmp_path, monkeypatch):
         f = write_toml(tmp_path / "config.toml", "[profiles]\n")
@@ -40,4 +40,4 @@ class TestGetProfile:
         f = write_toml(tmp_path / "config.toml", VALID_TOML)
         monkeypatch.setattr(RESOLVE_CONGIG_PATH_IMPORT_STRING, lambda _: f)
         profile = get_profile("dev", "global")
-        assert isinstance(profile, Profile)
+        assert isinstance(profile, BaseProfile)

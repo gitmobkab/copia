@@ -1,4 +1,4 @@
-from copia.cli.config import Profile
+from copia.cli.config import ServerBasedProfile
 
 VALID_PROFILE = {
     "adapter": "mysql",
@@ -10,5 +10,5 @@ VALID_PROFILE = {
 }
 
 
-def make_profile(**overrides) -> Profile:
-    return Profile(**{**VALID_PROFILE, **overrides})
+def make_profile(**overrides) -> ServerBasedProfile:
+    return ServerBasedProfile(**{**VALID_PROFILE, **overrides})

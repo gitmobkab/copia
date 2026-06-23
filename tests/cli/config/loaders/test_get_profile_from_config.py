@@ -4,7 +4,7 @@ from tests.cli.config.loaders.utils import VALID_PROFILE_DATA
 
 from copia.cli.config.loaders import get_profile_from_config
 from copia.cli.config import(
-    Profile,
+    BaseProfile,
     ProfilesKeyIsNotATableError,
     ProfileNotFoundError,
     FoundProfileIsNotATableError,
@@ -15,7 +15,7 @@ class TestGetProfileFromConfig:
     def test_valid_profile(self):
         config = {"profiles": {"dev": VALID_PROFILE_DATA}}
         profile = get_profile_from_config("dev", config)
-        assert isinstance(profile, Profile)
+        assert isinstance(profile, BaseProfile)
         assert profile.adapter == "mysql"
 
     def test_no_profiles_key_raises_not_found(self):

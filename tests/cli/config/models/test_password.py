@@ -1,4 +1,4 @@
-from copia.cli.config import Profile
+from copia.cli.config import ServerBasedProfile
 
 from tests.cli.config.models.utils import make_profile, VALID_PROFILE
 
@@ -12,7 +12,7 @@ class TestPassword:
 
     def test_password_defaults_to_empty(self):
         data = {k: v for k, v in VALID_PROFILE.items() if k != "password"}
-        assert Profile(**data).password == ""
+        assert ServerBasedProfile(**data).password == ""
 
     def test_password_with_special_chars(self):
         pw = "p@ss/w0rd! #$%^&*()"
