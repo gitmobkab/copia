@@ -12,7 +12,7 @@ class TestAdapter:
 
     def test_invalid_adapter(self):
         with pytest.raises(ValidationError):
-            make_profile(adapter="sqlite")
+            make_profile(adapter="bullshit")
 
     def test_empty_adapter(self):
         with pytest.raises(ValidationError):

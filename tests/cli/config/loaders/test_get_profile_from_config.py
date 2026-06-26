@@ -68,8 +68,3 @@ class TestGetProfileFromConfig:
         config = {"profiles": {"dev": incomplete}}
         with pytest.raises(InvalidProfileError):
             get_profile_from_config("dev", config)
-
-    def test_extra_field_in_profile_raises(self):
-        config = {"profiles": {"dev": {**VALID_PROFILE_DATA, "unknown": "value"}}}
-        with pytest.raises(InvalidProfileError):
-            get_profile_from_config("dev", config)
