@@ -43,7 +43,7 @@ class FileBasedProfile(BaseProfile):
 
 def resolve_profile(payload: dict) -> BaseProfile:
     basic_info = BaseProfile(**payload)
-    if basic_info.adapter == "mysql":
+    if basic_info.adapter == "sqlite":
         return FileBasedProfile(**payload)
     else:
         return ServerBasedProfile(**payload)
